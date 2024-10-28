@@ -1,1 +1,1 @@
-#Judging Portal for GeeseHacks 2025
+Judging Portal for GeeseHacks 2025
