@@ -31,12 +31,6 @@ const teamsData = [
 ];
 
 const LeaderBoard = () => {
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-
-  const handleRowClick = (teamName: string) => {
-    setSelectedTeam(teamName); // Set the selected team
-  };
-  
   return (
     <div>
       <Card className="flex-1 flex w-full h-full min-w-0 overflow-hidden bg-opacity-5 bg-white py-9 px-10">
@@ -58,9 +52,7 @@ const LeaderBoard = () => {
                   <Dialog>
                     <DialogTrigger asChild>
                       <button
-                        className="text-[18px] font-bold text-white underline"
-                        onClick={() => handleRowClick(team.name)}
-                      >
+                        className="text-[18px] font-bold text-white underline">
                         {team.name}
                       </button>
                     </DialogTrigger>
