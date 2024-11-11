@@ -30,7 +30,7 @@ import {
     const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   
     const handleRowClick = (teamName: string) => {
-      setSelectedTeam(teamName); // Set the selected team
+      setSelectedTeam(teamName);
     };
     
     return (

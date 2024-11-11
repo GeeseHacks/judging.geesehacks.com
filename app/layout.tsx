@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-import { SessionProvider } from 'next-auth/react';
+//import { SessionProvider } from 'next-auth/react';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { Analytics } from "@vercel/analytics/react"

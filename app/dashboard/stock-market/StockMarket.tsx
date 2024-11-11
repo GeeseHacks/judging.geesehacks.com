@@ -6,20 +6,6 @@ import Image from "next/image";
 import LeaderBoard from "./LeaderBoard";
 import MyInvestments from "./MyInvestments";
 
-const chartData = [
-  { time: "11:00 AM", value: 186 },
-  { time: "11:15 AM", value: 305 },
-  { time: "11:30 AM", value: 305 },
-  { time: "11:45 AM", value: 305 },
-  { time: "12:00 PM", value: 237 },
-  { time: "12:15 PM", value: 237 },
-  { time: "12:30 PM", value: 73 },
-  { time: "12:45 PM", value: 237 },
-  { time: "1:00 PM", value: 209 },
-  { time: "1:15 PM", value: 209 },
-  { time: "1:30 PM", value: 214 },
-];
-
 const categories = [
   { name: "General", component: <LeaderBoard /> },
   { name: "Category 1", component: <LeaderBoard /> },

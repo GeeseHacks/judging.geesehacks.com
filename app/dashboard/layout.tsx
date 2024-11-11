@@ -2,7 +2,7 @@
 import Hamburger from "@/components/nav/Hamburger";
 import SideNav from "@/components/nav/SideNav";
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
