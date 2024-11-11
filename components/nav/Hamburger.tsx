@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { signOutAction } from "@/utils/signOutAction";
+//import { signOutAction } from "@/utils/signOutAction";
 import { Button } from "@/components/ui/button";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai"; // Add icon library
 import { sideNavLinks, SideNavProps } from "./SideNav";
