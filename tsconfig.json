@@ -12,15 +12,19 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@lib/*": ["lib/*"],
+      "@utils/*": ["utils/*"],
+      "@/app/*": ["app/*"],
+      "@/*": ["./*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/auth/users/[email]", "jest.config.js"],
   "exclude": ["node_modules"]
 }
