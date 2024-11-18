@@ -18,9 +18,9 @@ const StockMarket: React.FC = () => {
   const [activeTab, setActiveTab] = useState("General");
 
   return (
-    <div className="relative flex h-full overflow-hidden">
-      <div className="absolute top-24 left-80 w-[500px] h-[500px] rounded-full bg-[#7D14D0] opacity-15 blur-3xl z-[-10]"></div>
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-[#119FCC] opacity-15 blur-3xl z-[-10]"></div>
+    <div className="relative flex flex-col h-full">
+      <div className="absolute -top-24 -left-36 w-[500px] h-[500px] rounded-full bg-[#7D14D0] opacity-10 blur-3xl z-[-10]"></div>
+      <div className="absolute -bottom-20 -right-10 w-[500px] h-[500px] rounded-full bg-[#119FCC] opacity-10 blur-3xl z-[-10]"></div>
       <div className="px-7 lg:px-2 flex-1 flex flex-col">
         <div className="flex items-center space-x-4">
           <Image
@@ -34,7 +34,7 @@ const StockMarket: React.FC = () => {
         <p className="pb-7 text-md md:text-lg pt-3 text-gray-500">
           Some description here
         </p>
-        <div className="flex space-x-4 pb-8 text-lg font-semibold">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pb-8">
           {categories.map((category) => (
             <button
               key={category.name}
@@ -45,7 +45,7 @@ const StockMarket: React.FC = () => {
                   : "text-white"
               } px-4 py-2 rounded-lg`}
             >
-              {category.name}
+              <span className="text-md md:text-lg font-semibold">{category.name}</span>
             </button>
           ))}
         </div>

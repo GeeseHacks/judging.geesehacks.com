@@ -34,20 +34,20 @@ import {
             <TableHeader>
               <TableRow>
                   <TableHead className="w-[100px] pb-4"></TableHead>
-                  <TableHead className="text-xl font-bold text-white pb-4">ID</TableHead>
-                  <TableHead className="text-xl font-bold text-white pb-4">Invested Value</TableHead>
-                  <TableHead className="text-right text-xl font-bold text-white pb-4">% Change</TableHead>
+                  <TableHead className="text-lg sm:text-xl font-bold text-white pb-4">ID</TableHead>
+                  <TableHead className="text-lg sm:text-xl font-bold text-white pb-4">Invested Value</TableHead>
+                  <TableHead className="text-right text-lg sm:text-xl font-bold text-white pb-4">% Change</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
               {teamsData.map((team) => (
                 <TableRow key={team.id} className="hover:bg-[#0E0823] cursor-pointer">
-                  <TableCell className="text-[18px] text-[#D175FA] font-bold px-10 py-6 rounded-tl-2xl rounded-bl-2xl">{team.id}</TableCell>
+                  <TableCell className="sm:text-[18px] text-[#D175FA] font-bold px-10 py-6 rounded-tl-2xl rounded-bl-2xl">{team.id}</TableCell>
                   <TableCell>
                     <Dialog>
                       <DialogTrigger asChild>
                         <button
-                          className="text-[18px] font-bold text-white underline">
+                          className="sm:text-[18px] font-bold text-white underline">
                           {team.name}
                         </button>
                       </DialogTrigger>
@@ -62,8 +62,8 @@ import {
                       </DialogContent>
                     </Dialog>
                   </TableCell>
-                  <TableCell className="text-[#F1D2FF] text-lg font-semibold">{team.value}</TableCell>
-                  <TableCell className="text-right text-lg text-[#95F2FF] font-semibold pr-10 rounded-tr-2xl rounded-br-2xl">{team.change}</TableCell>
+                  <TableCell className="text-[#F1D2FF] sm:text-lg font-semibold">{team.value}</TableCell>
+                  <TableCell className="text-right sm:text-lg text-[#95F2FF] font-semibold pr-10 rounded-tr-2xl rounded-br-2xl">{team.change}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
