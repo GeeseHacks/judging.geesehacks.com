@@ -34,7 +34,7 @@ const ProjectBrowser  = () => {
       ];
 
     return (
-        <div className="relative flex min-h-screen overflow-hidden">
+        <div className="relative flex h-full overflow-hidden">
         <div className="absolute top-24 left-80 w-[500px] h-[500px] rounded-full bg-[#7D14D0] opacity-15 blur-3xl z-[-10]"></div>
         <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-[#119FCC] opacity-15 blur-3xl z-[-10]"></div>
         <div className="px-7 lg:px-2 flex-1 flex flex-col">
