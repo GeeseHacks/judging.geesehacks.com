@@ -33,9 +33,9 @@ const StockGraph  = ({ teamName, chartData }: { teamName?: string; chartData?: {
   const data = teamName ? dataForTeams[teamName] : chartData || [];
 
   return (
-    <div>
+    <div >
       <Card className="flex-1 flex w-full h-full min-w-0 overflow-hidden bg-opacity-5 bg-white">
-        <CardContent className="flex-1 min-w-0">
+        <CardContent className="flex-1 min-w-0 ">
           <ChartContainer config={chartConfig} className="w-full h-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
