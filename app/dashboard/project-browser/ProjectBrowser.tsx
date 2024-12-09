@@ -1,37 +1,43 @@
-"use client";
+'use client';
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";    
 import { useState } from "react";
 
 const ProjectBrowser = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("All Projects");
 
   const projects = [
-    {
-      id: 1,
-      name: "Project 1",
-      description: "This is the project description honk honk honk honk",
-      value: "$100,000,000",
-      invested: "$100",
-      icon: "/static/icons/geesehacks.png",
-    },
-    {
-      id: 2,
-      name: "Project 2",
-      description: "Another project description honk honk honk honk",
-      value: "$50,000,000",
-      invested: "$500",
-      icon: "/static/icons/geesehacks.png",
-    },
-    {
-      id: 3,
-      name: "Project 3",
-      description: "Another project description honk honk honk honk",
-      value: "$10",
-      invested: "$0",
-      icon: "/static/icons/geesehacks.png",
-    },
+      {
+          id: 1,
+          name: "Project 1",
+          description: "This is the project description honk honk honk honk",
+          value: "$100,000,000",
+          invested: "$100",
+          icon: "/static/icons/geesehacks.png",
+      },
+      {
+          id: 2,
+          name: "Project 2",
+          description: "Another project description honk honk honk honk",
+          value: "$50,000,000",
+          invested: "$500",
+          icon: "/static/icons/geesehacks.png",
+      },
+      {
+          id: 3,
+          name: "Project 3",
+          description: "Another project description honk honk honk honk",
+          value: "$10",
+          invested: "$0",
+          icon: "/static/icons/geesehacks.png",
+      },
   ];
+
+  const handleCardClick = (projectID: number) => {
+      router.push(`project-browser/${projectID}`);
+  };
 
   return (
     <div className="relative flex flex-col h-full">
@@ -82,6 +88,7 @@ const ProjectBrowser = () => {
           {projects.map((project) => (
             <div
               key={project.id}
+              onClick={() => handleCardClick(project.id)}
               className="bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full"
             >
               <div className="absolute top-1 right-4 m-5 w-10 h-10">
