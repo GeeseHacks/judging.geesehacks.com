@@ -1,39 +1,60 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@lib/prisma';
 
-export async function GET(request: NextRequest, { params }: { params: { projectId: string } }) {
-  const { projectId } = params;
+export async function GET(req: NextRequest) {
+    try {
+        // Fetch all investments with related project (team) details
+        const investments = await prisma.investment.findMany({
+          include: {
+            Project: true, // Include project (team) details
+          },
+          orderBy: {
+            createdAt: 'asc', // Ensure investments are processed in chronological order
+          },
+        });
 
-  try {
-    // Fetch investments for the given projectId
-    const investments = await prisma.investment.findMany({
-      where: {
-        projectId: parseInt(projectId), // Make sure projectId is an integer
-      },
-      include: {
-        project: true, // Include project details if needed
-      },
-    });
+        // console.log(investments);
+    
+        // Transform investments into the desired format
+        const dataForTeams: Record<string, { time: string; value: number }[]> = {};
 
-    // If no investments found for the project, return a 404
-    if (!investments.length) {
-      return NextResponse.json({ error: 'No investments found for this project' }, { status: 404 });
-    }
+        const projectTrackers: Record<string, number> = {};
 
-    // Transform the investments into the desired format
-    const dataForProject: { time: string; value: number }[] = investments.map((investment) => ({
-      time: investment.createdAt.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
-      value: investment.amount,
-    }));
+        // Iterate over the fetched investments
+        investments.forEach((investment) => {
+          const { Project, amount, createdAt } = investment;
 
-    // Send back the investment data with a 200 response
-    return NextResponse.json({ projectId, investments: dataForProject }, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching investments:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
-  }
+          if (!(Project.name in projectTrackers)) {
+            projectTrackers[Project.name] = 100_000; // Start at 100k
+            dataForTeams[Project.name] = []; // Initialize the team in the result object
+          }
+
+          // Update the cumulative value for the project
+          const prevValue = projectTrackers[Project.name];
+          const newValue = prevValue + amount;
+          projectTrackers[Project.name] = newValue;
+
+    
+          // Format the timestamp to a string like "11:00 AM"
+          const time = createdAt.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+          
+
+          // Push investment data for that time and amount
+          dataForTeams[Project.name].push({
+            time,
+            value: newValue,
+          });
+        });
+    
+        // Send the response back as JSON
+
+        console.log(dataForTeams);
+        return NextResponse.json(dataForTeams, { status: 200 });
+      } catch (error) {
+        console.error('Error fetching investments:', error);
+        return new NextResponse(JSON.stringify({ message: 'Generated token' }), { status: 500 });
+      }
 }
-

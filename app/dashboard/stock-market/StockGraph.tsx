@@ -30,7 +30,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const StockGraph  = ({ teamName, chartData }: { teamName?: string; chartData?: { time: string; value: number }[] }) => {
+const StockGraph  = ({ teamName}: { teamName?: string;}) => {
 
   const [dataForTeams, setDataForTeams] = useState<Record<string, { time: string; value: number }[]>>({});
   useEffect(() => {
@@ -50,7 +50,9 @@ const StockGraph  = ({ teamName, chartData }: { teamName?: string; chartData?: {
 
     fetchTeamData();
   }, [])
-  const data = teamName ? dataForTeams[teamName] : chartData || [];
+
+  console.log(dataForTeams)
+  const data = teamName ? dataForTeams[teamName] : [dataForTeams];
 
   return (
     <div >
