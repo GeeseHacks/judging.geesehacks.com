@@ -1,5 +1,5 @@
 'use client';
-
+import { useEffect, useState } from 'react';
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation"; 
@@ -7,6 +7,27 @@ import { useParams } from "next/navigation";
 const ProjectDetails = () => {
   const { id } = useParams();  
   const router = useRouter(); 
+  // const [project, setProject] = useState(null);
+  const [investmentAmount, setInvestmentAmount] = useState("");
+  const [error, setError] = useState(null);
+
+  // useEffect(() => {
+  //   // Fetch project data when component loads or `id` changes
+  //   const fetchProjectData = async () => {
+  //     try {
+  //       const response = await fetch(`/api/projects/${id}`); // Replace with your API endpoint
+  //       if (!response.ok) {
+  //         throw new Error(`Error fetching project: ${response.status}`);
+  //       }
+  //       const data = await response.json();
+  //       setProject(data); // Update state with fetched project data
+  //     } catch (err) {
+  //       console.error("Failed to fetch project data:", err);
+  //     }
+  //   };
+
+  //   if (id) fetchProjectData();
+  // }, [id]);
 
   if (!id) return <div>Loading...</div>;
 
@@ -21,6 +42,60 @@ const ProjectDetails = () => {
     balance: "$100,000",
     projectMembers: ["Ri Hong", "Benny Wu", "Bill Gates"],
   };
+
+  const projId = Number(id);
+
+  const handleAddInvestmentClick = async () => {
+    try {
+      const response = await fetch(`/api/investments/${projId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          amount: parseInt(investmentAmount),
+          judgeId: 3 //HOW TO GET CURRENT LOGGED IN JUDGE'S ID??!!
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // setError(null);
+      console.log("Fetched investments:", data.investments);
+    } catch (err) {
+      console.error("Failed to fetch investments:", err);
+      // setError("Failed to fetch investments. Please try again later.");
+    }
+  };
+
+  const handleRetrackInvestmentClick = async() => {
+    try {
+      const response = await fetch(`/api/investments/${projId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          amount: parseInt(investmentAmount) * -1,
+          judgeId: 3 //HOW TO GET CURRENT LOGGED IN JUDGE'S ID??!!
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // setError(null);
+      console.log("Fetched investments:", data.investments);
+    } catch (err) {
+      console.error("Failed to fetch investments:", err);
+      // setError("Failed to fetch investments. Please try again later.");
+    }
+  }
 
   return (
     <div className="relative flex flex-col h-full">
@@ -95,15 +170,22 @@ const ProjectDetails = () => {
             <input
               type="number"
               placeholder="$"
+              value={investmentAmount}
+              onChange={(e) => setInvestmentAmount(e.target.value)}
               className="p-2 md:p-3 pl-4 font-semibold rounded-md bg-gray-800 text-white"
-            />
+          />
           </div>
         </div>
         <div>
-          <button className="px-4 py-2 font-semibold text-sm md:text-base rounded-lg bg-[#3C3064] text-[#D175FA] mr-5">
+        <button
+            onClick={handleAddInvestmentClick}
+            className="px-4 py-2 font-semibold text-sm md:text-base rounded-lg bg-[#3C3064] text-[#D175FA] mr-5"
+          >
             Add Investment
           </button>
-          <button className="mt-3 md:mt-0 px-4 py-2 font-semibold rounded-lg text-sm md:text-base bg-[#533939] text-[#FA7575]">
+          <button 
+            onClick={handleRetrackInvestmentClick}
+            className="mt-3 md:mt-0 px-4 py-2 font-semibold rounded-lg text-sm md:text-base bg-[#533939] text-[#FA7575]">
             Retract Investment
           </button>
         </div>

@@ -9,6 +9,7 @@ import {
 import {
   Card,
 } from "@/components/ui/card";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,16 +21,35 @@ import {
 import StockGraph from "./StockGraph";
 
 
-const teamsData = [
-  { id: 1, name: "Team 1", value: "$1,000,000", change: "+50%" },
-  { id: 2, name: "Team 2", value: "$1,000,000", change: "+50%" },
-  { id: 3, name: "Team 3", value: "$1,000,000", change: "+50%" },
-  { id: 4, name: "Team 4", value: "$1,000,000", change: "+50%" },
-  { id: 5, name: "Team 5", value: "$1,000,000", change: "+50%" },
-  { id: 6, name: "Team 6", value: "$1,000,000", change: "+50%" },
-];
+// const teamsData = [
+//   { id: 1, name: "Team 1", value: "$1,000,000", change: "+50%" },
+//   { id: 2, name: "Team 2", value: "$1,000,000", change: "+50%" },
+//   { id: 3, name: "Team 3", value: "$1,000,000", change: "+50%" },
+//   { id: 4, name: "Team 4", value: "$1,000,000", change: "+50%" },
+//   { id: 5, name: "Team 5", value: "$1,000,000", change: "+50%" },
+//   { id: 6, name: "Team 6", value: "$1,000,000", change: "+50%" },
+// ];
+
+interface Team {
+  id: number;
+  name: string;
+  value: string;
+  change: string;
+}
 
 const LeaderBoard = () => {
+  const [teamsData, setTeams] = useState<Team[]>([]);
+  
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const response = await fetch('/api/teamData');
+      const data = await response.json();
+      setTeams(data);
+    };
+
+    fetchTeams();
+  }, []);
+
   return (
     <div>
       <Card className="flex-1 flex w-full h-full min-w-0 overflow-hidden bg-opacity-5 bg-white pt-7 sm:py-9 px-2 sm:px-10">

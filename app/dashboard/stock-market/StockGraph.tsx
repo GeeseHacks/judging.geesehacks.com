@@ -2,6 +2,7 @@ import React from "react";
 
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { ResponsiveContainer } from "recharts";
+import { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -14,13 +15,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 
-const dataForTeams: Record<string, { time: string; value: number }[]> = {
-  "Team 1": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
-  "Team 2": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
-  "Team 3": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
-  "Team 4": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
-  "Team 5": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
-};
+// const dataForTeams: Record<string, { time: string; value: number }[]> = {
+//   "Team 1": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
+//   "Team 2": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
+//   "Team 3": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
+//   "Team 4": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
+//   "Team 5": [{ time: "11:00 AM", value: 186 }, { time: "11:15 AM", value: 305 }, { time: "11:30 AM", value: 256 }, { time: "11:45 AM", value: 305 }],
+// };
 
 const chartConfig = {
   time: {
@@ -30,6 +31,25 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const StockGraph  = ({ teamName, chartData }: { teamName?: string; chartData?: { time: string; value: number }[] }) => {
+
+  const [dataForTeams, setDataForTeams] = useState<Record<string, { time: string; value: number }[]>>({});
+  useEffect(() => {
+    async function fetchTeamData() {
+      try {
+        //gets all investments for EVERY TEAM, should follow the format above hopefully
+        const response = await fetch('/api/investments'); 
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        setDataForTeams(data);
+      } catch (error) {
+        console.error('Failed to fetch team data:', error);
+      }
+    }
+
+    fetchTeamData();
+  }, [])
   const data = teamName ? dataForTeams[teamName] : chartData || [];
 
   return (
