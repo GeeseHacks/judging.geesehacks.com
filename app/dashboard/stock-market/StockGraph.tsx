@@ -97,6 +97,7 @@ const StockGraph  = ({ teamName}: { teamName?: string;}) => {
                     fontSize: 14,
                     fill: "purple",
                   }}
+                  domain = {[50000,150000]}
                 />
                 <ChartTooltip
                   cursor={false}
