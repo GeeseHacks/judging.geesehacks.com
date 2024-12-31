@@ -39,9 +39,8 @@ export async function GET(req: NextRequest) {
           const time = createdAt.toLocaleTimeString('en-US', {
             hour: '2-digit',
             minute: '2-digit',
-          });
+          })
           
-
           // Push investment data for that time and amount
           dataForTeams[Project.name].push({
             time,

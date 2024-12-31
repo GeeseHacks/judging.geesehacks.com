@@ -1,20 +1,66 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model User {
+  id                         String                @id @default(uuid()) @db.VarChar(36)
+  firstname                  String                @db.VarChar(50)
+  lastname                   String                @db.VarChar(50)
+  age                        Int
+  email                      String                @unique @db.VarChar(100)
+  phone_number               String                @db.VarChar(20)
+  school                     String                @db.VarChar(100)
+  level_of_study             String                @db.VarChar(100)
+  country_of_residence       String                @db.VarChar(255)
+  dietary_restrictions       String                @db.VarChar(100)
+  github                     String?               @db.VarChar(255)
+  linkedin                   String?               @db.VarChar(255)
+  personal_website           String?               @db.VarChar(255)
+  MLH_authorize              Boolean?
+  field_of_study             String                @db.VarChar(100)
+  optional_consider          String?               @db.VarChar(255)
+  optional_gender            String?               @db.VarChar(50)
+  optional_pronouns          String?               @db.VarChar(50)
+  optional_race              String?               @db.VarChar(50)
+  optional_underrepresented  String?
+  other_dietary_restrictions String?               @db.VarChar(100)
+  resume                     String?               @db.VarChar(255)
+  t_shirt_size               String?               @db.VarChar(50)
+  status                     UserStatus
+  attendedEventIds           Json?
+  event_qr_code              String?               @unique @db.VarChar(255)
+  application_responses      ApplicationResponse[]
+  team_id                    String?               @db.Uuid
 }
 
 model ApplicationResponse {
-  id     String @id @db.VarChar(36)
+  id     String @id @default(uuid()) @db.VarChar(36)
   userid String
   q1     String @db.VarChar(1000)
   q2     String @db.VarChar(1000)
-  User   User   @relation(fields: [userid], references: [id])
+  user   User   @relation(fields: [userid], references: [id])
 
   @@index([userid])
+}
+
+model UserAuth {
+  id              String    @id @default(uuid()) @db.VarChar(36)
+  email           String    @unique @db.VarChar(100)
+  password        String    @db.VarChar(60)
+  resetToken      String?   @db.VarChar(255)
+  tokenExpiration DateTime?
+}
+
+model ScannerUserAuth {
+  id       String @id @db.VarChar(36)
+  email    String @unique @db.VarChar(100)
+  password String @db.VarChar(60)
 }
 
 model EventParticipation {
@@ -76,12 +122,6 @@ model Project {
   @@index([name])
 }
 
-model ScannerUserAuth {
-  id       String @id @db.VarChar(36)
-  email    String @unique @db.VarChar(100)
-  password String @db.VarChar(60)
-}
-
 model Tag {
   id        Int     @id @default(autoincrement())
   name      String  @db.VarChar(50)
@@ -90,44 +130,6 @@ model Tag {
   Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
-}
-
-model User {
-  id                         String                @id @db.VarChar(36)
-  firstname                  String                @db.VarChar(50)
-  lastname                   String                @db.VarChar(50)
-  age                        Int
-  email                      String                @unique @db.VarChar(100)
-  phone_number               String                @db.VarChar(20)
-  school                     String                @db.VarChar(100)
-  level_of_study             String                @db.VarChar(100)
-  country_of_residence       String                @db.VarChar(255)
-  dietary_restrictions       String                @db.VarChar(100)
-  github                     String?               @db.VarChar(255)
-  linkedin                   String?               @db.VarChar(255)
-  personal_website           String?               @db.VarChar(255)
-  MLH_authorize              Boolean?
-  field_of_study             String                @db.VarChar(100)
-  optional_consider          String?               @db.VarChar(255)
-  optional_gender            String?               @db.VarChar(50)
-  optional_pronouns          String?               @db.VarChar(50)
-  optional_race              String?               @db.VarChar(50)
-  optional_underrepresented  String?
-  other_dietary_restrictions String?               @db.VarChar(100)
-  resume                     String?               @db.VarChar(255)
-  t_shirt_size               String?               @db.VarChar(50)
-  status                     UserStatus
-  attendedEventIds           Json?
-  event_qr_code              String?               @unique @db.VarChar(255)
-  ApplicationResponse        ApplicationResponse[]
-}
-
-model UserAuth {
-  id              String    @id @db.VarChar(36)
-  email           String    @unique @db.VarChar(100)
-  password        String    @db.VarChar(60)
-  resetToken      String?   @db.VarChar(255)
-  tokenExpiration DateTime?
 }
 
 enum UserStatus {

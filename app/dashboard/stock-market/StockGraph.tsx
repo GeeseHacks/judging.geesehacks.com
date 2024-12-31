@@ -85,7 +85,7 @@ const StockGraph  = ({ teamName}: { teamName?: string;}) => {
                   }
                   orientation="top"
                   stroke="white"
-                  tick={{ fontSize: 14 }}
+                  tick={{ fontSize: 12 }}
                 />
                 <YAxis
                   tickLine={false}
@@ -94,7 +94,7 @@ const StockGraph  = ({ teamName}: { teamName?: string;}) => {
                   tickFormatter={(value) => `$${value}`}
                   stroke="gray"
                   tick={{
-                    fontSize: 14,
+                    fontSize: 12,
                     fill: "purple",
                   }}
                   domain = {[50000,150000]}

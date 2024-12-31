@@ -17,8 +17,11 @@ export async function GET(req: NextRequest) {
           name: team.name,
           value: `$${team.totalInvestment.toLocaleString()}`,
           change: change,
+          numericValue: team.totalInvestment,
         };
       });
+
+      formattedTeams.sort((a, b) => b.numericValue - a.numericValue);
 
       return NextResponse.json(formattedTeams);
     } catch (error) {

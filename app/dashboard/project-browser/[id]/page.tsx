@@ -19,10 +19,10 @@ const ProjectDetails = () => {
   const router = useRouter(); 
   const [project, setProject] = useState<Project | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // BUG: this doesn't automatically update when the data updates. try polling or some websockets thing
     const fetchProjectData = async () => {
       try {
         const response = await fetch(`/api/judgeProjects/3/project/${id}`); // api format: /api/judgeProjects/{judgeId}/projects/{projectId}
@@ -39,7 +39,7 @@ const ProjectDetails = () => {
     };
 
     if (id) fetchProjectData();
-  }, [id]);
+  }, [id, refreshKey]);
 
   if (!id) return <div>Loading...</div>;
 
@@ -75,6 +75,8 @@ const ProjectDetails = () => {
       }
 
       const data = await response.json();
+      setInvestmentAmount("");
+      setRefreshKey((prev) => prev + 1);
       // setError(null);
       console.log("Fetched investments:", data.investments);
     } catch (err) {
@@ -83,7 +85,7 @@ const ProjectDetails = () => {
     }
   };
 
-  const handleRetrackInvestmentClick = async() => {
+  const handleRetractInvestmentClick = async() => {
     try {
       const response = await fetch(`/api/investments/${projId}`, {
         method: "POST",
@@ -102,6 +104,8 @@ const ProjectDetails = () => {
 
       const data = await response.json();
       // setError(null);
+      setInvestmentAmount("");
+      setRefreshKey((prev) => prev + 1);
       console.log("Fetched investments:", data.investments);
     } catch (err) {
       console.error("Failed to fetch investments:", err);
@@ -144,7 +148,7 @@ const ProjectDetails = () => {
 
         <div className="absolute top-40 right-5 md:top-44 md:right-10 m-5">
           <Image
-            src={project?.icon}
+            src={project?.icon ?? ''}
             alt={`${project?.name} Icon`}
             width={120}
             height={120}
@@ -198,7 +202,7 @@ const ProjectDetails = () => {
             Add Investment
           </button>
           <button 
-            onClick={handleRetrackInvestmentClick}
+            onClick={handleRetractInvestmentClick}
             className="mt-3 md:mt-0 px-4 py-2 font-semibold rounded-lg text-sm md:text-base bg-[#533939] text-[#FA7575]">
             Retract Investment
           </button>
