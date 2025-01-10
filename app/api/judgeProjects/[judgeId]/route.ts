@@ -2,8 +2,10 @@
 //This api should get all the projects that a judge is responsible for judging
 
 
-import { NextRequest, NextResponse } from 'next/server';
+// import { NextRequest, NextResponse } from 'next/server';
 // import prisma from '@lib/prisma';
+
+import { NextRequest} from 'next/server';
 
 export async function GET(request: NextRequest){
   console.log(request);
