@@ -1,8 +1,13 @@
-//Temporarily commented out because I need to fix api route (previously used judgePair table now deleted)
+//Temporarily a placeholder because I need to fix api route (previously used judgePair table now deleted)
 //This api should get all the projects that a judge is responsible for judging
 
-// import { NextRequest, NextResponse } from 'next/server';
+
+import { NextRequest, NextResponse } from 'next/server';
 // import prisma from '@lib/prisma';
+
+export async function GET(request: NextRequest){
+  console.log(request);
+}
 
 // export async function GET(request: NextRequest, { params }: { params: { judgeId: string } }) {
 //   const { judgeId } = params;
