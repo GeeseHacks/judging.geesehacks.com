@@ -20,7 +20,7 @@ const ProjectDetails = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProjectData = async () => {
