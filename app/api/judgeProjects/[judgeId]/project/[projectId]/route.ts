@@ -18,7 +18,7 @@ export async function GET(request: NextRequest, { params }: { params: { projectI
       where: { id: projectIdInt },
       include: {
         Investment: {
-          include: { judge: { select: { name: true } } },
+          include: { Judge: { select: { name: true } } },
         },
       },
     });
