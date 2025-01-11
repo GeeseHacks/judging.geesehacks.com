@@ -2,38 +2,67 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";    
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+
+interface Project {
+  id: number,
+  name: string;
+  description: string;
+  value: string;
+  invested: string;
+  icon: string;
+}
 
 const ProjectBrowser = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("All Projects");
+  const [projects, setProjects] = useState<Project[]>([]);
 
-  const projects = [
-      {
-          id: 1,
-          name: "Project 1",
-          description: "This is the project description honk honk honk honk",
-          value: "$100,000,000",
-          invested: "$100",
-          icon: "/static/icons/geesehacks.png",
-      },
-      {
-          id: 2,
-          name: "Project 2",
-          description: "Another project description honk honk honk honk",
-          value: "$50,000,000",
-          invested: "$500",
-          icon: "/static/icons/geesehacks.png",
-      },
-      {
-          id: 3,
-          name: "Project 3",
-          description: "Another project description honk honk honk honk",
-          value: "$10",
-          invested: "$0",
-          icon: "/static/icons/geesehacks.png",
-      },
-  ];
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch(`/api/judgeProjects/3/`);
+        if (!response.ok) {
+          throw new Error(`Error fetching project: ${response.status}`);
+        }
+        const data = await response.json();
+        // console.log("HIIIII")
+        // console.log(data);
+        setProjects(data.projects);
+      } catch (err) {
+        console.error("Failed to fetch project data:", err);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // const projects = [
+  //     {
+  //         id: 1,
+  //         name: "Project 1",
+  //         description: "This is the project description honk honk honk honk",
+  //         value: "$100,000,000",
+  //         invested: "$100",
+  //         icon: "/static/icons/geesehacks.png",
+  //     },
+  //     {
+  //         id: 2,
+  //         name: "Project 2",
+  //         description: "Another project description honk honk honk honk",
+  //         value: "$50,000,000",
+  //         invested: "$500",
+  //         icon: "/static/icons/geesehacks.png",
+  //     },
+  //     {
+  //         id: 3,
+  //         name: "Project 3",
+  //         description: "Another project description honk honk honk honk",
+  //         value: "$10",
+  //         invested: "$0",
+  //         icon: "/static/icons/geesehacks.png",
+  //     },
+  // ];
 
   const handleCardClick = (projectID: number) => {
       router.push(`project-browser/${projectID}`);

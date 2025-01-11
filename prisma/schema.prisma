@@ -1,0 +1,157 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model User {
+  id                         String                @id @default(uuid()) @db.VarChar(36)
+  firstname                  String                @db.VarChar(50)
+  lastname                   String                @db.VarChar(50)
+  age                        Int
+  email                      String                @unique @db.VarChar(100)
+  phone_number               String                @db.VarChar(20)
+  school                     String                @db.VarChar(100)
+  level_of_study             String                @db.VarChar(100)
+  country_of_residence       String                @db.VarChar(255)
+  dietary_restrictions       String                @db.VarChar(100)
+  github                     String?               @db.VarChar(255)
+  linkedin                   String?               @db.VarChar(255)
+  personal_website           String?               @db.VarChar(255)
+  MLH_authorize              Boolean?
+  field_of_study             String                @db.VarChar(100)
+  optional_consider          String?               @db.VarChar(255)
+  optional_gender            String?               @db.VarChar(50)
+  optional_pronouns          String?               @db.VarChar(50)
+  optional_race              String?               @db.VarChar(50)
+  optional_underrepresented  String?
+  other_dietary_restrictions String?               @db.VarChar(100)
+  resume                     String?               @db.VarChar(255)
+  t_shirt_size               String?               @db.VarChar(50)
+  status                     UserStatus
+  attendedEventIds           Json?
+  event_qr_code              String?               @unique @db.VarChar(255)
+  team_id                    String?               @db.Uuid
+  net_worth                  Int                   @default(0)
+  application_responses      ApplicationResponse[]
+}
+
+model ApplicationResponse {
+  id     String @id @default(uuid()) @db.VarChar(36)
+  userid String
+  q1     String @db.VarChar(1000)
+  q2     String @db.VarChar(1000)
+  user   User   @relation(fields: [userid], references: [id])
+
+  @@index([userid])
+}
+
+model UserAuth {
+  id              String    @id @default(uuid()) @db.VarChar(36)
+  email           String    @unique @db.VarChar(100)
+  password        String    @db.VarChar(60)
+  resetToken      String?   @db.VarChar(255)
+  tokenExpiration DateTime?
+}
+
+model ScannerUserAuth {
+  id       String @id @db.VarChar(36)
+  email    String @unique @db.VarChar(100)
+  password String @db.VarChar(60)
+}
+
+model EventParticipation {
+  id        Int     @id @default(autoincrement())
+  eventName String  @db.VarChar(255)
+  projectId Int
+  amount    Int     @default(0)
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model Investment {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  judgeId   Int
+  projectId Int
+  createdAt DateTime @default(now())
+  Judge     Judge    @relation(fields: [judgeId], references: [id], onDelete: Cascade)
+  Project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([judgeId])
+  @@index([projectId])
+}
+
+model Judge {
+  id             Int          @id @default(autoincrement())
+  name           String       @db.VarChar(255)
+  company        String?      @db.VarChar(255)
+  isGuest        Boolean      @default(false)
+  availableFunds Int          @default(10000)
+  trackTagId     Int?
+  Investment     Investment[]
+  trackTag       CategoryTag? @relation(fields: [trackTagId], references: [id])
+  projects       Project[]    @relation("JudgesOnProjects")
+
+  @@index([name])
+}
+
+model Project {
+  id                 Int                  @id @default(autoincrement())
+  name               String               @db.VarChar(255)
+  totalInvestment    Int                  @default(0)
+  description        String?
+  devpostLink        String?              @db.VarChar(255)
+  imageUrl           String?              @db.VarChar(255)
+  EventParticipation EventParticipation[]
+  GeneralProject     GeneralProject[]
+  Investment         Investment[]
+  SunlifeProject     SunlifeProject[]
+  TeejLabProject     TeejLabProject[]
+  categoryTags       CategoryTag[]        @relation("CategoryTagsOnProjects")
+  judges             Judge[]              @relation("JudgesOnProjects")
+
+  @@index([name])
+}
+
+model CategoryTag {
+  id       Int       @id @default(autoincrement())
+  name     String    @db.VarChar(50)
+  color    String    @db.VarChar(7)
+  judges   Judge[]
+  projects Project[] @relation("CategoryTagsOnProjects")
+
+  @@index([name])
+}
+
+model GeneralProject {
+  id        Int     @id @default(autoincrement())
+  projectId Int
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model SunlifeProject {
+  id        Int     @id @default(autoincrement())
+  projectId Int
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model TeejLabProject {
+  id        Int     @id @default(autoincrement())
+  projectId Int
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+enum UserStatus {
+  ACCEPTED
+  REJECTED
+  WAITLIST
+  NOT_APPLIED
+  APPLIED
+  CONFIRMED
+}
