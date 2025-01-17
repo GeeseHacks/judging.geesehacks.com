@@ -1,11 +1,14 @@
 import React from "react";
-
+import { useEffect, useState } from 'react';
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { ResponsiveContainer } from "recharts";
-import { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 
 import {
@@ -30,34 +33,32 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const StockGraph  = ({ teamName}: { teamName?: string;}) => {
+const StockGraph  = ({ projId}: { projId?: string}) => {
+  const [data, setData] = useState<{ time: string; value: number }[]>([]);
 
-  const [dataForTeams, setDataForTeams] = useState<Record<string, { time: string; value: number }[]>>({});
   useEffect(() => {
+    if (!projId) return;
+
     async function fetchTeamData() {
       try {
-        //gets all investments for EVERY TEAM, should follow the format above hopefully
-        const response = await fetch('/api/investments'); 
+        const response = await fetch(`/api/investments/${projId}`); 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
         }
-        const data = await response.json();
-        setDataForTeams(data);
+        const investmentData = await response.json();
+        setData(investmentData); 
       } catch (error) {
-        console.error('Failed to fetch team data:', error);
+        console.error("Failed to fetch investment data:", error);
       }
     }
 
     fetchTeamData();
-  }, [])
-
-  console.log(dataForTeams)
-  const data = teamName ? dataForTeams[teamName] : [dataForTeams];
+  }, [projId]);
 
   return (
-    <div >
+    <div>
       <Card className="flex-1 flex w-full h-full min-w-0 overflow-hidden bg-opacity-5 bg-white">
-        <CardContent className="flex-1 min-w-0 ">
+        <CardContent className="flex-1 min-w-0">
           <ChartContainer config={chartConfig} className="w-full h-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
@@ -97,7 +98,6 @@ const StockGraph  = ({ teamName}: { teamName?: string;}) => {
                     fontSize: 12,
                     fill: "purple",
                   }}
-                  domain = {[50000,150000]}
                 />
                 <ChartTooltip
                   cursor={false}

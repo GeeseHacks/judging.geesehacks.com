@@ -29,8 +29,8 @@ export async function GET(request: NextRequest, { params }: { params: { projectI
 
     // Calculate your investment and balance
     const yourInvestment = project.Investment
-      .filter((investment) => investment.judgeId === judgeIdInt)
-      .reduce((total, investment) => total + investment.amount, 0);
+      .filter((investment: { judgeId: number; }) => investment.judgeId === judgeIdInt)
+      .reduce((total: any, investment: { amount: any; }) => total + investment.amount, 0);
 
     const judge = await prisma.judge.findUnique({
       where: { id: judgeIdInt },
