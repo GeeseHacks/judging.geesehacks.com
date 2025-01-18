@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
                 investmentAmount: true,
               },
             },
+            
           },
         },
       },
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
         name: project.name,
         description: project.description,
         value: '$'+project.categories.reduce((sum, category) => sum + category.investmentAmount, 0).toString(), // Sum all investmentAmounts
-        invested: '', // Placeholder for now
+        invested: `$${jp.amountInvested}`, // Placeholder for now
         icon: project.imageUrl || '', // Default to empty string if no imageUrl
       };
     });

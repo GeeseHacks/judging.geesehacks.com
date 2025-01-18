@@ -35,10 +35,10 @@ model User {
   status                     UserStatus
   attendedEventIds           Json?
   event_qr_code              String?               @unique @db.VarChar(255)
-  project_id                 String?               @db.Uuid
   net_worth                  Int                   @default(0)
+  project_id                 String?               @db.Uuid
   application_responses      ApplicationResponse[]
-  
+
   @@index([project_id])
 }
 
@@ -67,87 +67,83 @@ model ScannerUserAuth {
 }
 
 model InvestmentHistory {
-  id           Int       @id @default(autoincrement())
-  projectValue Int        // The project's total value after the transaction
+  id           Int      @id @default(autoincrement())
+  projectValue Int
   judgeId      Int
-  projectId    String    @db.Uuid
-  createdAt    DateTime   @default(now())
-  
-  judge        Judge      @relation(fields: [judgeId], references: [id], onDelete: Cascade)
-  project      Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId    String   @db.Uuid
+  createdAt    DateTime @default(now())
+  judge        Judge    @relation(fields: [judgeId], references: [id], onDelete: Cascade)
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  @@index([judgeId])       // Fast queries by judge
-  @@index([projectId])     // Fast queries by project
-  @@index([judgeId, projectId]) // Efficient queries for judge-project-specific history
+  @@index([judgeId])
+  @@index([projectId])
+  @@index([judgeId, projectId])
 }
 
 model Judge {
-  id             Int          @id @default(autoincrement())
-  name           String       @db.VarChar(255)
-  login_key      String       @unique @db.VarChar(255)
-  availableFunds Int          @default(10000)
-  InvestmentHistory     InvestmentHistory[]
-  projects  JudgeProject[]
-  categories  JudgeCategory[] // Many-to-many relationship with Category
+  id                Int                 @id @default(autoincrement())
+  name              String              @db.VarChar(255)
+  availableFunds    Int                 @default(10000)
+  login_key         String              @unique @db.VarChar(255)
+  InvestmentHistory InvestmentHistory[]
+  categories        JudgeCategory[]
+  projects          JudgeProject[]
 
   @@index([name])
 }
 
 model JudgeProject {
-  judgeId    Int
-  projectId  String    @db.Uuid
+  judgeId        Int
+  projectId      String  @db.Uuid
+  amountInvested Int     @default(0)
+  judge          Judge   @relation(fields: [judgeId], references: [id], onDelete: Cascade)
+  project        Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  judge      Judge          @relation(fields: [judgeId], references: [id], onDelete: Cascade)
-  project    Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@id([judgeId, projectId]) // Composite primary key for uniqueness
-  @@index([judgeId])         // Index for fast queries by judge
+  @@id([judgeId, projectId])
+  @@index([judgeId])
 }
 
 model Project {
-  id                 String               @id @db.Uuid
-  name               String               @db.VarChar(255)
-  description        String               @db.VarChar(255)
-  devpostLink        String               @db.VarChar(255)
-  imageUrl           String?              @db.VarChar(255)
-  InvestmentHistory  InvestmentHistory[]
-  categories         ProjectCategory[]
-  judges             JudgeProject[]
+  name              String              @db.VarChar(255)
+  description       String              @db.VarChar(255)
+  devpostLink       String              @db.VarChar(255)
+  imageUrl          String?             @db.VarChar(255)
+  id                String              @id @db.Uuid
+  InvestmentHistory InvestmentHistory[]
+  judges            JudgeProject[]
+  categories        ProjectCategory[]
 
-  @@index([name]) // Do we need this?
+  @@index([name])
 }
 
 model Category {
-  id        Int             @id @default(autoincrement())
-  name      String
-  projects  ProjectCategory[]
-  judges    JudgeCategory[] // Many-to-many relationship with Judge
+  id       Int               @id @default(autoincrement())
+  name     String
+  judges   JudgeCategory[]
+  projects ProjectCategory[]
 }
 
 model JudgeCategory {
   judgeId    Int
   categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  judge      Judge    @relation(fields: [judgeId], references: [id], onDelete: Cascade)
 
-  judge      Judge        @relation(fields: [judgeId], references: [id], onDelete: Cascade)
-  category   Category       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@id([judgeId, categoryId]) // Composite primary key for uniqueness
-  @@index([judgeId])        // Index for fast queries by judge
-  @@index([categoryId])       // Index for fast queries by category
+  @@id([judgeId, categoryId])
+  @@index([judgeId])
+  @@index([categoryId])
 }
 
 model ProjectCategory {
-  projectId         String    @db.Uuid
-  categoryId        Int
-  investmentAmount  Int
+  projectId        String   @db.Uuid
+  categoryId       Int
+  investmentAmount Int
+  category         Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  project          Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  project           Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  category          Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@id([projectId, categoryId]) // Composite primary key for efficiency
-  @@index([categoryId])         // Index for fast querying by category
+  @@id([projectId, categoryId])
+  @@index([categoryId])
 }
-
 
 enum UserStatus {
   ACCEPTED

@@ -75,13 +75,27 @@ export async function GET(request: NextRequest, { params }: { params: { projId :
 
     const members = projectMembers.map((user) => `${user.firstname} ${user.lastname}`);
 
+    //yourInvestment
+
+    const judgeProject = await prisma.judgeProject.findFirst({
+      where: {
+        judgeId: judgeIdInt,
+        projectId: projId,
+      },
+      select:{
+        amountInvested : true
+      }
+    });
+
+    const investedAmount = judgeProject.amountInvested;
+
     const response = {
       name: project.name,
       description: project.description,
       icon: project.imageUrl || "",
       currentValue: `$${curVal.toString()}`,
       // yourInvestment: yourInvestment.toString(),
-      yourInvestment: "$100",
+      yourInvestment: `$${investedAmount}`,
       balance: `$${judge.availableFunds.toString()}`,
       projectMembers: members,
     };

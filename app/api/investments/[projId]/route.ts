@@ -20,6 +20,20 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
       throw new Error("Judge's category not found.");
     }
 
+    await prisma.judgeProject.update({
+      where: {
+        judgeId_projectId:{
+          judgeId: judgeId,
+          projectId: projId
+        }
+      },
+      data: {
+        amountInvested: {
+          increment: amount
+        }
+      }
+    })
+
     const categoryId = judgeCategory.categoryId;
 
     // Step 2: Get the project's category and current investment amount
