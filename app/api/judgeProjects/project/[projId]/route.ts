@@ -87,6 +87,10 @@ export async function GET(request: NextRequest, { params }: { params: { projId :
       }
     });
 
+    if(!judgeProject){
+      throw new Error("Judge's project not found.");
+    }
+
     const investedAmount = judgeProject.amountInvested;
 
     const response = {
