@@ -95,7 +95,7 @@ const ProjectDetails = () => {
         },
         body: JSON.stringify({ 
           amount: parseInt(investmentAmount) * -1,
-          judgeId: 3 //HOW TO GET CURRENT LOGGED IN JUDGE'S ID??!!
+          judgeId: 3 //@sarah this is a placeholder for judgeId
         }),
       });
 

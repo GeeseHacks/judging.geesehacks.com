@@ -21,7 +21,7 @@ const ProjectBrowser = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const judgeId = 3;
+        const judgeId = 3; //@sarah this is a placeholder for judgeId
         const response = await fetch(`/api/judgeProjects?judgeId=${judgeId}`);
         if (!response.ok) {
           throw new Error(`Error fetching projects: ${response.status}`);
