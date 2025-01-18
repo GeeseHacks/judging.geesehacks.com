@@ -81,7 +81,6 @@ model InvestmentHistory {
   @@index([judgeId, projectId]) // Efficient queries for judge-project-specific history
 }
 
-
 model Judge {
   id             Int          @id @default(autoincrement())
   name           String       @db.VarChar(255)

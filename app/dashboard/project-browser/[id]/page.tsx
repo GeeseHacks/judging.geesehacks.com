@@ -55,11 +55,11 @@ const ProjectDetails = () => {
   //   projectMembers: ["Ri Hong", "Benny Wu", "Bill Gates"],
   // };
 
-  const projId = Number(id);
+  const projId = id;
 
   const handleAddInvestmentClick = async () => {
     try {
-      const response = await fetch(`/api/investments/${projId}`, {
+      const response = await fetch(`/api/investments/a72d1d4e-6187-49be-b3e4-c7e47b9884b2`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const ProjectDetails = () => {
 
   const handleRetractInvestmentClick = async() => {
     try {
-      const response = await fetch(`/api/investments/${projId}`, {
+      const response = await fetch(`/api/investments/a72d1d4e-6187-49be-b3e4-c7e47b9884b2`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
