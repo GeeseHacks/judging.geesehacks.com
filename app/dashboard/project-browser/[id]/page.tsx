@@ -56,7 +56,7 @@ const ProjectDetails = () => {
   //   projectMembers: ["Ri Hong", "Benny Wu", "Bill Gates"],
   // };
 
-  const projId = id;
+  // const projId = id;
 
   const handleAddInvestmentClick = async () => {
     try {
