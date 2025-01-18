@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
         id: project.id,
         name: project.name,
         description: project.description,
-        value: project.categories.reduce((sum, category) => sum + category.investmentAmount, 0).toString(), // Sum all investmentAmounts
+        value: '$'+project.categories.reduce((sum, category) => sum + category.investmentAmount, 0).toString(), // Sum all investmentAmounts
         invested: '', // Placeholder for now
         icon: project.imageUrl || '', // Default to empty string if no imageUrl
       };
