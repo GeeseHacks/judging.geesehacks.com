@@ -25,14 +25,16 @@ const ProjectDetails = () => {
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
-        const response = await fetch(`/api/judgeProjects/3/project/${id}`); // api format: /api/judgeProjects/{judgeId}/projects/{projectId}
+        const response = await fetch(`/api/judgeProjects/project/${id}?judgeId=3`);
         if (!response.ok) {
           throw new Error(`Error fetching project: ${response.status}`);
         }
         const data = await response.json();
         // console.log("HIIIII")
         // console.log(data);
-        setProject(data.project);
+        setProject(data);
+
+        console.log(project)
       } catch (err) {
         console.error("Failed to fetch project data:", err);
       }
