@@ -79,10 +79,10 @@ export async function GET(request: NextRequest, { params }: { params: { projId :
       name: project.name,
       description: project.description,
       icon: project.imageUrl || "",
-      currentValue: curVal.toString(),
+      currentValue: `$${curVal.toString()}`,
       // yourInvestment: yourInvestment.toString(),
       yourInvestment: "$100",
-      balance: judge.availableFunds.toString(),
+      balance: `$${judge.availableFunds.toString()}`,
       projectMembers: members,
     };
 

@@ -28,6 +28,7 @@ const ProjectBrowser = () => {
         }
   
         const data = await response.json();
+        console.log(data)
         setProjects(data);
       } catch (err) {
         console.error("Failed to fetch project data:", err);

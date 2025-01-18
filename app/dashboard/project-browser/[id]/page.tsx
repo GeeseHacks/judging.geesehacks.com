@@ -30,8 +30,7 @@ const ProjectDetails = () => {
           throw new Error(`Error fetching project: ${response.status}`);
         }
         const data = await response.json();
-        // console.log("HIIIII")
-        // console.log(data);
+
         setProject(data);
 
         console.log(project)
@@ -61,7 +60,7 @@ const ProjectDetails = () => {
 
   const handleAddInvestmentClick = async () => {
     try {
-      const response = await fetch(`/api/investments/a72d1d4e-6187-49be-b3e4-c7e47b9884b2`, {
+      const response = await fetch(`/api/investments/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +88,7 @@ const ProjectDetails = () => {
 
   const handleRetractInvestmentClick = async() => {
     try {
-      const response = await fetch(`/api/investments/a72d1d4e-6187-49be-b3e4-c7e47b9884b2`, {
+      const response = await fetch(`/api/investments/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +131,7 @@ const ProjectDetails = () => {
       </div>
 
       {/* Description Section */}
-      <p className="pb-6 text-base md:text-lg text-gray-500">Some description here</p>
+      <p className="pb-6 text-base md:text-lg text-gray-500">Make changes to your investments here</p>
       <div className="flex justify-start ">
         <button
               onClick={() => router.push("/dashboard/project-browser/")}
@@ -162,7 +161,6 @@ const ProjectDetails = () => {
           <div className="flex flex-col">
             <span className="text-[#D175FA] text-base">Current Value</span>
             <span className="text-base md:text-lg">{project?.currentValue}</span>
-
             <span className="text-[#BD6CE6] mt-2 md:mt-5 text-base">My Balance</span>
             <span className="text-base md:text-lg">{project?.balance}</span>
           </div>
