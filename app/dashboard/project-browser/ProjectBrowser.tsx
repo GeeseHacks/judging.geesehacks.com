@@ -21,19 +21,20 @@ const ProjectBrowser = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await fetch(`/api/judgeProjects/3/`);
+        const judgeId = 3; //@sarah this is a placeholder for judgeId
+        const response = await fetch(`/api/judgeProjects?judgeId=${judgeId}`);
         if (!response.ok) {
-          throw new Error(`Error fetching project: ${response.status}`);
+          throw new Error(`Error fetching projects: ${response.status}`);
         }
+  
         const data = await response.json();
-        // console.log("HIIIII")
-        // console.log(data);
-        setProjects(data.projects);
+        console.log(data)
+        setProjects(data);
       } catch (err) {
         console.error("Failed to fetch project data:", err);
       }
     };
-
+  
     fetchProjects();
   }, []);
 
@@ -120,14 +121,14 @@ const ProjectBrowser = () => {
               onClick={() => handleCardClick(project.id)}
               className="bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full"
             >
-              <div className="absolute top-1 right-4 m-5 w-10 h-10">
+              {/* <div className="absolute top-1 right-4 m-5 w-10 h-10">
                 <Image
                   src={project.icon}
                   alt={`${project.name} Icon`}
                   width={40}
                   height={40}
                 />
-              </div>
+              </div> */}
               <h2 className="text-2xl font-semibold">{project.name}</h2>
               <p className="text-gray-300 mt-10">{project.description}</p>
               <div className="flex justify-between items-center mt-5">

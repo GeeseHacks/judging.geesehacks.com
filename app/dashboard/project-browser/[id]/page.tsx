@@ -25,14 +25,15 @@ const ProjectDetails = () => {
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
-        const response = await fetch(`/api/judgeProjects/3/project/${id}`); // api format: /api/judgeProjects/{judgeId}/projects/{projectId}
+        const response = await fetch(`/api/judgeProjects/project/${id}?judgeId=3`);
         if (!response.ok) {
           throw new Error(`Error fetching project: ${response.status}`);
         }
         const data = await response.json();
-        // console.log("HIIIII")
-        // console.log(data);
-        setProject(data.project);
+
+        setProject(data);
+
+        console.log(project)
       } catch (err) {
         console.error("Failed to fetch project data:", err);
       }
@@ -55,11 +56,11 @@ const ProjectDetails = () => {
   //   projectMembers: ["Ri Hong", "Benny Wu", "Bill Gates"],
   // };
 
-  const projId = Number(id);
+  // const projId = id;
 
   const handleAddInvestmentClick = async () => {
     try {
-      const response = await fetch(`/api/investments/${projId}`, {
+      const response = await fetch(`/api/investments/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,14 +88,14 @@ const ProjectDetails = () => {
 
   const handleRetractInvestmentClick = async() => {
     try {
-      const response = await fetch(`/api/investments/${projId}`, {
+      const response = await fetch(`/api/investments/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
           amount: parseInt(investmentAmount) * -1,
-          judgeId: 3 //HOW TO GET CURRENT LOGGED IN JUDGE'S ID??!!
+          judgeId: 3 //@sarah this is a placeholder for judgeId
         }),
       });
 
@@ -130,7 +131,7 @@ const ProjectDetails = () => {
       </div>
 
       {/* Description Section */}
-      <p className="pb-6 text-base md:text-lg text-gray-500">Some description here</p>
+      <p className="pb-6 text-base md:text-lg text-gray-500">Make changes to your investments here</p>
       <div className="flex justify-start ">
         <button
               onClick={() => router.push("/dashboard/project-browser/")}
@@ -146,7 +147,7 @@ const ProjectDetails = () => {
         <h1 className="text-2xl md:text-3xl font-semibold text-white">{project?.name}</h1>
         <p className="sm:pb-6 text-sm sm:text-lg text-white break-words max-w-[20ch] sm:max-w-[30ch] md:max-w-[50ch]">{project?.description}</p>
 
-        <div className="absolute top-40 right-5 md:top-44 md:right-10 m-5">
+        {/* <div className="absolute top-40 right-5 md:top-44 md:right-10 m-5">
           <Image
             src={project?.icon ?? ''}
             alt={`${project?.name} Icon`}
@@ -154,13 +155,12 @@ const ProjectDetails = () => {
             height={120}
             className="w-24 h-24 sm:w-24 sm:h-24 md:w-32 md:h-32 object-contain"
           />
-        </div>
+        </div> */}
 
         <div className="flex sm:flex-row justify-between font-semibold text-white gap-3 sm:gap-0">
           <div className="flex flex-col">
             <span className="text-[#D175FA] text-base">Current Value</span>
             <span className="text-base md:text-lg">{project?.currentValue}</span>
-
             <span className="text-[#BD6CE6] mt-2 md:mt-5 text-base">My Balance</span>
             <span className="text-base md:text-lg">{project?.balance}</span>
           </div>
