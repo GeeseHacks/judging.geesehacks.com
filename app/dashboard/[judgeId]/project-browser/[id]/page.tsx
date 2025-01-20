@@ -15,7 +15,7 @@ interface Project {
 }
 
 const ProjectDetails = () => {
-  const { id } = useParams();  
+  const { id, judgeId } = useParams(); 
   const router = useRouter(); 
   const [project, setProject] = useState<Project | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState("");
@@ -25,7 +25,7 @@ const ProjectDetails = () => {
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
-        const response = await fetch(`/api/judgeProjects/project/${id}?judgeId=3`);
+        const response = await fetch(`/api/judgeProjects/project/${id}?judgeId=${judgeId}`);
         if (!response.ok) {
           throw new Error(`Error fetching project: ${response.status}`);
         }
@@ -67,7 +67,7 @@ const ProjectDetails = () => {
         },
         body: JSON.stringify({ 
           amount: parseInt(investmentAmount),
-          judgeId: 3 //HOW TO GET CURRENT LOGGED IN JUDGE'S ID??!!
+          judgeId
         }),
       });
 
@@ -95,7 +95,7 @@ const ProjectDetails = () => {
         },
         body: JSON.stringify({ 
           amount: parseInt(investmentAmount) * -1,
-          judgeId: 3 //@sarah this is a placeholder for judgeId
+          judgeId,
         }),
       });
 
@@ -134,7 +134,7 @@ const ProjectDetails = () => {
       <p className="pb-6 text-base md:text-lg text-gray-500">Make changes to your investments here</p>
       <div className="flex justify-start ">
         <button
-              onClick={() => router.push("/dashboard/project-browser/")}
+              onClick={() => router.push(`/dashboard/${judgeId}/project-browser/`)}
               className="text-[#BD6CE6] text-lg font-semibold transparent"
             >
           ← All Projects
