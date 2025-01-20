@@ -1,27 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 //import { signOutAction } from "@/utils/signOutAction";
 
 
 export const sideNavLinks = [
   {
     name: "Home",
-    href: "/dashboard",
+    href: "",
     icon: "/static/icons/home.png",
   },
   {
     name: "Schedule",
-    href: "/dashboard/schedule",
+    href: "schedule",
     icon: "/static/icons/calendar.png",
   },
   {
     name: "Stock Market",
-    href: "/dashboard/stock-market",
+    href: "stock-market",
     icon: "/static/icons/stock-market.png",
   },
   {
     name: "Project Browser",
-    href: "/dashboard/project-browser",
+    href: "project-browser",
     icon: "/static/icons/stock-market.png",
   },
 ];
@@ -31,6 +32,7 @@ export interface SideNavProps {
 }
 
 const SideNav: React.FC<SideNavProps> = ({ className }) => {
+  const { judgeId } = useParams();
   // const shouldShowStockMarketLink = () => {
   //   const now = new Date();
   //   const targetDate = new Date(2024, 8, 2, 16, 20, 0); // modify this with exact time and date
@@ -51,7 +53,7 @@ const SideNav: React.FC<SideNavProps> = ({ className }) => {
         {/* Nav Content */}
         <div className="flex flex-col grow w-full text-xl font-light space-y-10">
           {sideNavLinks.map((link) =>
-            <Link className="flex space-x-8 hover:opacity-35" key={link.name} href={link.href}>
+            <Link className="flex space-x-8 hover:opacity-35" key={link.name} href={`/dashboard/${judgeId}/${link.href}`}>
               <Image src={link.icon} height={0} width={0} sizes="100vw" alt={link.name} style={{ height: 24, width: 'auto' }} />
               <h2>{link.name}</h2>
             </Link>
