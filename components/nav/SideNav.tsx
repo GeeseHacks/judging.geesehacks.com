@@ -5,14 +5,9 @@ import Link from "next/link";
 
 export const sideNavLinks = [
   {
-    name: "Home",
-    href: "/dashboard",
-    icon: "/static/icons/home.png",
-  },
-  {
-    name: "Schedule",
-    href: "/dashboard/schedule",
-    icon: "/static/icons/calendar.png",
+    name: "Project Browser",
+    href: "/dashboard/project-browser",
+    icon: "/static/icons/stock-market.png",
   },
   {
     name: "Stock Market",
@@ -20,9 +15,9 @@ export const sideNavLinks = [
     icon: "/static/icons/stock-market.png",
   },
   {
-    name: "Project Browser",
-    href: "/dashboard/project-browser",
-    icon: "/static/icons/stock-market.png",
+    name: "Schedule",
+    href: "/dashboard/schedule",
+    icon: "/static/icons/calendar.png",
   },
 ];
 

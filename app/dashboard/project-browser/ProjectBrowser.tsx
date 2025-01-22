@@ -84,7 +84,7 @@ const ProjectBrowser = () => {
           <h1 className="text-3xl md:text-4xl font-semibold">Project Browser</h1>
         </div>
         <p className="pb-2 text-md md:text-lg pt-3 text-gray-500">
-          Some description here
+          Submit investments to projects here
         </p>
 
         {/* Tabs */}
