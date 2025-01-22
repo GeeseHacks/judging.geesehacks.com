@@ -5,25 +5,20 @@ import Link from "next/link";
 
 export const sideNavLinks = [
   {
-    name: "Home",
-    href: "/dashboard",
-    icon: "/static/icons/home.png",
-  },
-  {
-    name: "Schedule",
-    href: "/dashboard/schedule",
-    icon: "/static/icons/calendar.png",
+    name: "Project Browser",
+    href: "/dashboard/project-browser",
+    icon: "/static/icons/project-browser.png",
   },
   {
     name: "Stock Market",
     href: "/dashboard/stock-market",
     icon: "/static/icons/stock-market.png",
   },
-  {
-    name: "Project Browser",
-    href: "/dashboard/project-browser",
-    icon: "/static/icons/stock-market.png",
-  },
+  // {
+  //   name: "Schedule",
+  //   href: "/dashboard/schedule",
+  //   icon: "/static/icons/calendar.png",
+  // },
 ];
 
 export interface SideNavProps {

@@ -48,7 +48,7 @@ const StockMarket: React.FC = () => {
           <h1 className="text-3xl md:text-4xl font-semibold">Stock Market</h1>
         </div>
         <p className="pb-7 text-md md:text-lg pt-3 text-gray-500">
-          Some description here
+          View the top projects and their performance
         </p>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pb-8">
           {categories.map((category) => (
