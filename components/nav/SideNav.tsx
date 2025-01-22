@@ -14,11 +14,11 @@ export const sideNavLinks = [
     href: "/dashboard/stock-market",
     icon: "/static/icons/stock-market.png",
   },
-  {
-    name: "Schedule",
-    href: "/dashboard/schedule",
-    icon: "/static/icons/calendar.png",
-  },
+  // {
+  //   name: "Schedule",
+  //   href: "/dashboard/schedule",
+  //   icon: "/static/icons/calendar.png",
+  // },
 ];
 
 export interface SideNavProps {
