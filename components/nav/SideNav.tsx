@@ -7,7 +7,7 @@ export const sideNavLinks = [
   {
     name: "Project Browser",
     href: "/dashboard/project-browser",
-    icon: "/static/icons/stock-market.png",
+    icon: "/static/icons/project-browser.png",
   },
   {
     name: "Stock Market",
