@@ -28,6 +28,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
+import ProjectBrowserHeader from "@/components/ProjectBrowserHeader";
 
 interface Project {
   id: string;
@@ -85,38 +86,7 @@ const MyInvestments: React.FC = () => {
       <div className="absolute -top-24 -left-36 w-[500px] h-[500px] rounded-full bg-[#7D14D0] opacity-10 blur-3xl z-[-10]"></div>
       <div className="absolute -bottom-20 -right-12 w-[500px] h-[500px] rounded-full bg-[#119FCC] opacity-10 blur-3xl z-[-10]"></div>
       <div className="px-7 lg:px-2 flex-1 flex flex-col">
-        <div className="flex items-center space-x-4">
-          <Image
-            src="/static/icons/stock-market-title.png"
-            alt="Stock Market Title Image"
-            width={35}
-            height={35}
-          />
-          <h1 className="text-3xl md:text-4xl font-semibold">
-            Project Browser
-          </h1>
-        </div>
-        <p className="pb-2 text-md md:text-lg pt-3 text-gray-500">
-          Submit investments to projects here
-        </p>
-
-        {/* Navigation Buttons */}
-        <div className="flex space-x-4 pt-5 text-lg font-semibold">
-          <button
-            onClick={() => router.push("/dashboard/project-browser")}
-            className={`text-white px-4 py-2 rounded-lg hover:text-[#D175FA] hover:bg-[#3E2B65]`}
-          >
-            All Projects
-          </button>
-          <button
-            onClick={() =>
-              router.push("/dashboard/project-browser/my-investments")
-            }
-            className={`text-[#D175FA] bg-[#3E2B65] px-4 py-2 rounded-lg hover:text-[#D175FA] hover:bg-[#3E2B65]`}
-          >
-            My Investments
-          </button>
-        </div>
+        <ProjectBrowserHeader currentTab="investments" />
 
         {/* Add the table after the navigation buttons */}
         <div className="mt-6">
