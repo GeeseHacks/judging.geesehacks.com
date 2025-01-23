@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";    
-import { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface Project {
-  id: number,
+  id: number;
   name: string;
   description: string;
   value: string;
@@ -15,7 +15,6 @@ interface Project {
 
 const ProjectBrowser = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("All Projects");
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
@@ -26,15 +25,15 @@ const ProjectBrowser = () => {
         if (!response.ok) {
           throw new Error(`Error fetching projects: ${response.status}`);
         }
-  
+
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setProjects(data);
       } catch (err) {
         console.error("Failed to fetch project data:", err);
       }
     };
-  
+
     fetchProjects();
   }, []);
 
@@ -66,7 +65,7 @@ const ProjectBrowser = () => {
   // ];
 
   const handleCardClick = (projectID: number) => {
-      router.push(`project-browser/${projectID}`);
+    router.push(`project-browser/${projectID}`);
   };
 
   return (
@@ -81,33 +80,27 @@ const ProjectBrowser = () => {
             width={35}
             height={35}
           />
-          <h1 className="text-3xl md:text-4xl font-semibold">Project Browser</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold">
+            Project Browser
+          </h1>
         </div>
         <p className="pb-2 text-md md:text-lg pt-3 text-gray-500">
           Submit investments to projects here
         </p>
 
-        {/* Tabs */}
+        {/* Navigation Buttons */}
         <div className="flex space-x-4 pt-5 text-lg font-semibold">
           <button
-            key="All Projects"
-            onClick={() => setActiveTab("All Projects")}
-            className={`${
-              activeTab === "All Projects"
-                ? "text-[#D175FA] bg-[#3E2B65]"
-                : "text-white"
-            } px-4 py-2 rounded-lg`}
+            onClick={() => router.push("/dashboard/project-browser")}
+            className={`text-[#D175FA] bg-[#3E2B65] px-4 py-2 rounded-lg hover:text-[#D175FA] hover:bg-[#3E2B65]`}
           >
             All Projects
           </button>
           <button
-            key="My Investments"
-            onClick={() => setActiveTab("My Investments")}
-            className={`${
-              activeTab === "My Investments"
-                ? "text-[#D175FA] bg-[#3E2B65]"
-                : "text-white"
-            } px-4 py-2 rounded-lg`}
+            onClick={() =>
+              router.push("/dashboard/project-browser/my-investments")
+            }
+            className={`text-white px-4 py-2 rounded-lg hover:text-[#D175FA] hover:bg-[#3E2B65]`}
           >
             My Investments
           </button>
@@ -119,7 +112,7 @@ const ProjectBrowser = () => {
             <div
               key={project.id}
               onClick={() => handleCardClick(project.id)}
-              className="bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full"
+              className="hover:cursor-pointer hover:bg-[#3e2b655f] bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full"
             >
               {/* <div className="absolute top-1 right-4 m-5 w-10 h-10">
                 <Image

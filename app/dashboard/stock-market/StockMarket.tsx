@@ -6,7 +6,6 @@ import Image from "next/image";
 
 import LeaderBoard from "./LeaderBoard";
 import StockGraph from "./StockGraph";
-import MyInvestments from "./MyInvestments";
 
 const chartData = [
   { time: "11:00 AM", value: 186 },
@@ -27,7 +26,6 @@ const categories = [
   { name: "Sun Life", component: <LeaderBoard category={"Sun Life"}/> },
   { name: "TeejLab", component: <LeaderBoard category={"TeejLab"}/> },
   { name: "CS-CAN", component: <LeaderBoard category={"CS-CAN"}/> },
-  { name: "My Investments", component: <MyInvestments /> },
 ];
 
 const StockMarket: React.FC = () => {
