@@ -1,6 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@lib/prisma';
 
+function roundToNearest5Minutes(date: Date): Date {
+  const minutes = date.getMinutes();
+  const remainder = minutes % 5;
+  const roundedMinutes = remainder < 2.5 ? minutes - remainder : minutes + (5 - remainder);
+
+  // Set the rounded minutes, reset seconds and milliseconds
+  date.setMinutes(roundedMinutes);
+  date.setSeconds(0);
+  date.setMilliseconds(0);
+
+  return date;
+}
+
 export async function POST(req: NextRequest, { params }: { params: { projId: string } }) {
   const { projId } = params;
 
@@ -75,6 +88,7 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
         judgeId: judgeId,
         projectId: projId,
         projectValue: projectCategory.investmentAmount + amount,
+        createdAt: roundToNearest5Minutes(new Date())
       },
     });
 
@@ -106,13 +120,12 @@ export async function GET(req: NextRequest, { params }: { params: { projId: stri
 
     let cumulativeValue = 0;
     const chartData = investments.map((investment) => {
-      cumulativeValue += investment.projectValue;
       return {
         time: investment.createdAt.toLocaleTimeString('en-US', {
                 hour: '2-digit',
                 minute: '2-digit',
               }),
-        value: cumulativeValue,
+        value: investment.projectValue,
       };
     });
 
