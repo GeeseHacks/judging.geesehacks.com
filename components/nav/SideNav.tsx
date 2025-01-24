@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-//import { signOutAction } from "@/utils/signOutAction";
+import { signOutAction } from "@/utils/signOutAction";
+import { Button } from "../ui/button";
 
 
 export const sideNavLinks = [
@@ -53,7 +54,7 @@ const SideNav: React.FC<SideNavProps> = ({ className }) => {
         {/* Nav Content */}
         <div className="flex flex-col grow w-full text-xl font-light space-y-10">
           {sideNavLinks.map((link) =>
-            <Link className="flex space-x-8 hover:opacity-35" key={link.name} href={`/dashboard/${judgeId}/${link.href}`}>
+            <Link className="flex space-x-8 hover:opacity-35" key={link.name} href={`/dashboard/${link.href}`}>
               <Image src={link.icon} height={0} width={0} sizes="100vw" alt={link.name} style={{ height: 24, width: 'auto' }} />
               <h2>{link.name}</h2>
             </Link>
@@ -79,7 +80,14 @@ const SideNav: React.FC<SideNavProps> = ({ className }) => {
           </form> */}
         </div>
 
-
+      {/* Log Out Button */}
+      <div className="h-1/6 flex-shrink-0">
+          <form action={signOutAction}>
+            <Button className="flex w-36 items-center justify-center gap-2 rounded-full bg-gradient-to-r p-3 text-sm font-medium text-white shadow-lg transition duration-200 ease-in-out hover:bg-slate-700">
+              Sign Out
+            </Button>
+          </form>
+        </div>
       </div>
     </nav>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import SideNav from "../../../../components/nav/SideNav";
+import SideNav from "../../../components/nav/SideNav";
 import Image from "next/image";
 
 import LeaderBoard from "./LeaderBoard";

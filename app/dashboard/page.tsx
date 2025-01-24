@@ -4,21 +4,21 @@ import Link from "next/link";
 import { FaAngleRight } from "react-icons/fa";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 interface JudgeData {
   name: string;
 }
 
 const Home: React.FC = () => {
-  const { judgeId } = useParams();
+  const { data: session, status } = useSession();
   const [judgeData, setJudgeData] = useState<JudgeData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchJudgeData = async () => {
       try {
-        const response = await fetch(`/api/judges/${judgeId}`);
+        const response = await fetch(`/api/judges/${session?.user?.id}`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -30,17 +30,25 @@ const Home: React.FC = () => {
       }
     };
 
-    if (judgeId) {
+    if (session?.user?.id) {
       fetchJudgeData();
     }
-  }, [judgeId]);
+  }, [session?.user?.id]);
+
+  if (status === "loading") {
+    return <p>Loading...</p>;
+  }
+
+  if (status === "unauthenticated") {
+    return <p>Unauthorized: Please log in</p>;
+  }
 
   if (error) {
     return <p>{error}</p>;
   }
 
   if (!judgeData) {
-    return <p>Loading...</p>;
+    return <p>Loading judge data...</p>;
   }
 
   return (

@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google";
-//import { SessionProvider } from 'next-auth/react';
+import { SessionProvider } from 'next-auth/react';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { Analytics } from "@vercel/analytics/react"
@@ -20,7 +20,7 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
-        {/* <SessionProvider> */}
+        <SessionProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -31,7 +31,7 @@ export default async function RootLayout({
             <Toaster/>
             <Analytics/>
           </ThemeProvider>
-        {/* </SessionProvider> */}
+        </SessionProvider>
       </body>
     </html>
   );
