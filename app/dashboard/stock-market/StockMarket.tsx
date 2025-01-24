@@ -6,7 +6,6 @@ import Image from "next/image";
 
 import LeaderBoard from "./LeaderBoard";
 import StockGraph from "./StockGraph";
-import MyInvestments from "./MyInvestments";
 
 const chartData = [
   { time: "11:00 AM", value: 186 },
@@ -27,7 +26,6 @@ const categories = [
   { name: "Sun Life", component: <LeaderBoard category={"Sun Life"}/> },
   { name: "TeejLab", component: <LeaderBoard category={"TeejLab"}/> },
   { name: "CS-CAN", component: <LeaderBoard category={"CS-CAN"}/> },
-  { name: "My Investments", component: <MyInvestments /> },
 ];
 
 const StockMarket: React.FC = () => {
@@ -48,7 +46,7 @@ const StockMarket: React.FC = () => {
           <h1 className="text-3xl md:text-4xl font-semibold">Stock Market</h1>
         </div>
         <p className="pb-7 text-md md:text-lg pt-3 text-gray-500">
-          Some description here
+          View the top projects and their performance
         </p>
         <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 pb-8">
           {categories.map((category) => (
