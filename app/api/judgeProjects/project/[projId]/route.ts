@@ -1,23 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@lib/prisma';
 
-export async function GET(request: NextRequest, { params }: { params: { projId : string } }) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { projId: string } }
+) {
   const url = new URL(request.url);
   const judgeId = url.searchParams.get('judgeId');
+  const { projId } = params;
 
-  const {projId} = params;
-
-  console.log(judgeId, projId)
+  console.log("Received Judge ID:", judgeId, "Project ID:", projId);
 
   if (!judgeId || isNaN(parseInt(judgeId)) || !projId) {
-    return NextResponse.json({ error: "Invalid judgeId or projId" }, { status: 400 });
+    return NextResponse.json(
+      { error: "Invalid judgeId or projId" },
+      { status: 400 }
+    );
   }
 
-  try{
-
+  try {
     const judgeIdInt = parseInt(judgeId);
 
-    //name, description, icon
+    // Fetch project details
     const project = await prisma.project.findUnique({
       where: { id: projId },
       select: {
@@ -27,10 +31,12 @@ export async function GET(request: NextRequest, { params }: { params: { projId :
       },
     });
 
+    console.log("Project:", project);
     if (!project) {
-      return NextResponse.json({ message: "Project not found" }, { status: 404 });
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
-    //balance
+
+    // Fetch judge's available funds
     const judge = await prisma.judge.findUnique({
       where: { id: judgeIdInt },
       select: {
@@ -38,18 +44,23 @@ export async function GET(request: NextRequest, { params }: { params: { projId :
       },
     });
 
+    console.log("Judge:", judge);
     if (!judge) {
-      return NextResponse.json({ message: "Judge not found" }, { status: 404 });
+      return NextResponse.json({ error: "Judge not found" }, { status: 404 });
     }
 
-    //get current project value
+    // Fetch current project value based on judge's category
     const judgeCategory = await prisma.judgeCategory.findFirst({
       where: { judgeId: judgeIdInt },
       include: { category: true },
     });
 
+    console.log("JudgeCategory:", judgeCategory);
     if (!judgeCategory) {
-      throw new Error("Judge's category not found.");
+      return NextResponse.json(
+        { error: "Judge's category not found" },
+        { status: 404 }
+      );
     }
 
     const categoryId = judgeCategory.categoryId;
@@ -57,65 +68,67 @@ export async function GET(request: NextRequest, { params }: { params: { projId :
     const projectCategory = await prisma.projectCategory.findFirst({
       where: { projectId: projId, categoryId },
       select: {
-        investmentAmount: true
-      }
+        investmentAmount: true,
+      },
     });
 
-    if (!projectCategory) {
-      throw new Error("Project category not found or does not match judge's category.");
+    console.log("ProjectCategory:", projectCategory); 
+    if (!projectCategory) { 
+      return NextResponse.json(
+        {
+          error:
+            "Project category not found or does not match judge's category",
+        },
+        { status: 404 }
+      );
     }
 
     const curVal = projectCategory.investmentAmount;
 
-    //projectMembers
+    // Fetch project members
     const projectMembers = await prisma.user.findMany({
       where: { project_id: projId },
       select: { firstname: true, lastname: true },
     });
 
-    const members = projectMembers.map((user) => `${user.firstname} ${user.lastname}`);
+    console.log("ProjectMembers:", projectMembers);
+    const members = projectMembers.map(
+      (user) => `${user.firstname} ${user.lastname}`
+    );
 
-    //yourInvestment
-
+    // Fetch judge's investment in the project
     const judgeProject = await prisma.judgeProject.findFirst({
       where: {
         judgeId: judgeIdInt,
         projectId: projId,
       },
-      select:{
-        amountInvested : true
-      }
+      select: {
+        amountInvested: true,
+      },
     });
 
-    if(!judgeProject){
-      throw new Error("Judge's project not found.");
-    }
+    console.log("JudgeProject:", judgeProject);
+    const investedAmount = judgeProject ? judgeProject.amountInvested : 0;
 
-    const investedAmount = judgeProject.amountInvested;
-
+    // Build response object
     const response = {
       name: project.name,
       description: project.description,
       icon: project.imageUrl || "",
-      currentValue: `$${curVal.toString()}`,
-      // yourInvestment: yourInvestment.toString(),
-      yourInvestment: `$${investedAmount}`,
-      balance: `$${judge.availableFunds.toString()}`,
+      currentValue: `$${curVal.toLocaleString()}`,
+      yourInvestment: `$${investedAmount.toLocaleString()}`,
+      balance: `$${judge.availableFunds.toLocaleString()}`,
       projectMembers: members,
     };
 
-    console.log(response)
+    console.log("Response:", response);
 
-    return NextResponse.json(response);
-
-  } catch (error){
+    return NextResponse.json(response, { status: 200 });
+  } catch (error) {
     console.error("Error fetching project data:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
-
-
 }
-

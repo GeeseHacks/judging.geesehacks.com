@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSession } from 'next-auth/react';
 import { useParams } from "next/navigation";
 import ProjectBrowserHeader from "@/components/ProjectBrowserHeader";
 
@@ -16,19 +17,22 @@ interface Project {
 }
 
 const ProjectDetails = () => {
-  const { id } = useParams();
-  const router = useRouter();
+  const { id } = useParams();   
+  const { data: session } = useSession();
+  const router = useRouter(); 
   const [project, setProject] = useState<Project | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
-  // const [error, setError] = useState(null);
+
+  const judgeId = session?.user?.id;
 
   useEffect(() => {
     const fetchProjectData = async () => {
+      if (!id || !judgeId) return;
+
       try {
-        const response = await fetch(
-          `/api/judgeProjects/project/${id}?judgeId=3`
-        );
+        const response = await fetch(`/api/judgeProjects/project/${id}?judgeId=${judgeId}`);
+        console.log(response)
         if (!response.ok) {
           throw new Error(`Error fetching project: ${response.status}`);
         }
@@ -70,7 +74,7 @@ const ProjectDetails = () => {
         },
         body: JSON.stringify({
           amount: parseInt(investmentAmount),
-          judgeId: 3, //HOW TO GET CURRENT LOGGED IN JUDGE'S ID??!!
+          judgeId,
         }),
       });
 
@@ -98,7 +102,7 @@ const ProjectDetails = () => {
         },
         body: JSON.stringify({
           amount: parseInt(investmentAmount) * -1,
-          judgeId: 3, //@sarah this is a placeholder for judgeId
+          judgeId,
         }),
       });
 
@@ -126,8 +130,8 @@ const ProjectDetails = () => {
 
       <div className="flex justify-start mt-6">
         <button
-          onClick={() => router.push("/dashboard/project-browser/")}
-          className="text-[#BD6CE6] text-lg font-semibold transparent"
+              onClick={() => router.push("/dashboard/project-browser/")}
+              className="text-[#BD6CE6] text-lg font-semibold transparent"
         >
           ← All Projects
         </button>
