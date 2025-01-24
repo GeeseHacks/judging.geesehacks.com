@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ProjectBrowserHeader from "@/components/ProjectBrowserHeader";
 import { useSession } from "next-auth/react";
 
 interface Project {
@@ -17,7 +18,6 @@ interface Project {
 const ProjectBrowser = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [activeTab, setActiveTab] = useState("All Projects");
   const [projects, setProjects] = useState<Project[]>([]);
   const [error, setError] = useState("");
 
@@ -59,44 +59,7 @@ const ProjectBrowser = () => {
       <div className="absolute -top-24 -left-36 w-[500px] h-[500px] rounded-full bg-[#7D14D0] opacity-10 blur-3xl z-[-10]"></div>
       <div className="absolute -bottom-20 -right-12 w-[500px] h-[500px] rounded-full bg-[#119FCC] opacity-10 blur-3xl z-[-10]"></div>
       <div className="px-7 lg:px-2 flex-1 flex flex-col">
-        <div className="flex items-center space-x-4">
-          <Image
-            src="/static/icons/stock-market-title.png"
-            alt="Stock Market Title Image"
-            width={35}
-            height={35}
-          />
-          <h1 className="text-3xl md:text-4xl font-semibold">Project Browser</h1>
-        </div>
-        <p className="pb-2 text-md md:text-lg pt-3 text-gray-500">
-          Some description here
-        </p>
-
-        {/* Tabs */}
-        <div className="flex space-x-4 pt-5 text-lg font-semibold">
-          <button
-            key="All Projects"
-            onClick={() => setActiveTab("All Projects")}
-            className={`${
-              activeTab === "All Projects"
-                ? "text-[#D175FA] bg-[#3E2B65]"
-                : "text-white"
-            } px-4 py-2 rounded-lg`}
-          >
-            All Projects
-          </button>
-          <button
-            key="My Investments"
-            onClick={() => setActiveTab("My Investments")}
-            className={`${
-              activeTab === "My Investments"
-                ? "text-[#D175FA] bg-[#3E2B65]"
-                : "text-white"
-            } px-4 py-2 rounded-lg`}
-          >
-            My Investments
-          </button>
-        </div>
+      <ProjectBrowserHeader currentTab="all" />
 
         {/* Project Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-5 mt-6 w-full">
@@ -104,7 +67,7 @@ const ProjectBrowser = () => {
             <div
               key={project.id}
               onClick={() => handleCardClick(project.id)}
-              className="bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full"
+              className="hover:cursor-pointer hover:bg-[#3e2b655f] bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full"
             >
               <h2 className="text-2xl font-semibold">{project.name}</h2>
               <p className="text-gray-300 mt-10">{project.description}</p>

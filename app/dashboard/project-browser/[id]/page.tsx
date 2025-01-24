@@ -130,9 +130,9 @@ const ProjectDetails = () => {
 
       <div className="flex justify-start mt-6">
         <button
-              onClick={() => router.push(`/dashboard/project-browser/`)}
+              onClick={() => router.push("/dashboard/project-browser/")}
               className="text-[#BD6CE6] text-lg font-semibold transparent"
-            >
+        >
           ← All Projects
         </button>
       </div>
