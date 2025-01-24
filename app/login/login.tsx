@@ -28,6 +28,7 @@ const Login = () => {
             if (response && response.error) {
               throw new Error(response.error); // Throwing the error to be caught by the error handler
             }
+            window.location.href = "/dashboard"
             return "Logged in successfully!";
           },
           error: (err) => {
@@ -35,31 +36,6 @@ const Login = () => {
           },
         });
       }
-
-
-    // try {
-    //     const response = await fetch("/api/auth/login", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({ uniqueKey: key }),
-    //     });
-    //     if (!response.ok) {
-    //     throw new Error(`HTTP error! status: ${response.status}`);
-    //     }
-
-    //     console.log("Response status:", response.status);
-    //     const data = await response.json();
-    //     console.log("Response data:", data);
-
-    //     if (data.success) {
-    //     window.location.href = `/dashboard/${data.judgeId}`;
-    //     } else {
-    //     setError(data.message || "Invalid unique key. Please try again.");
-    //     }
-    // } catch (error) {
-    //     console.error("Error during login:", error);
-    //     setError("An unexpected error occurred. Please try again.");
-    // }
   };
 
   return (
