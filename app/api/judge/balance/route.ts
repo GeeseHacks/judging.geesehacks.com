@@ -2,11 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@lib/prisma';
 
 export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const judgeId = url.searchParams.get('judgeId');
+
+  console.log("Received Judge ID:", judgeId, "Project ID:");
+
+  if (!judgeId || isNaN(parseInt(judgeId))) {
+    return NextResponse.json(
+      { error: "Invalid judgeId or projId" },
+      { status: 400 }
+    );
+  }
   try {
-    const judgeId = 6969; // TODO: Replace with actual judge authentication
+    const judgeIdInt = parseInt(judgeId);
 
     const judge = await prisma.judge.findUnique({
-      where: { id: judgeId },
+      where: { id: judgeIdInt },
       select: { availableFunds: true },
     });
 
