@@ -33,8 +33,8 @@ const SideNav: React.FC<SideNavProps> = ({ className })  => {
   const [selectedNav, setSelectedNav] = useState<string>(pathHref);
   
   return (
-    <nav className={`bg-gray-950 bg-opacity-25 min-h-screen w-80 xl:w-96 hidden lg:block overflow-y-auto ${className} fixed`}>
-      <div className="flex flex-col items-center justify-center px-12 xl:px-20 py-2 h-full space-y-4 w-full fixed">
+    <nav className={`bg-gray-950 bg-opacity-25 min-h-screen w-80 xl:w-96 hidden lg:block overflow-y-auto ${className}`}>
+      <div className="flex flex-col items-center justify-center px-12 xl:px-20 py-2 h-full space-y-4 w-full">
         {/* Nav Logo */}
         <div className="flex items-center w-full space-x-3 h-1/5">
           <Image src="/static/icons/geesehacks.png" height={38} width={38} alt="Geese Logo" />
@@ -42,43 +42,44 @@ const SideNav: React.FC<SideNavProps> = ({ className })  => {
         </div>
 
         {/* Nav Content */}
-        <div className="flex flex-col grow w-full text-xl font-light space-y-10">
-        {sideNavLinks.map((link) => (
-          <Link
-            key={link.name}
-            href={link.href.startsWith("https")
-              ? link.href
-              : `/dashboard${link.href}`}
-            target={link.href.startsWith("https") ? "_blank" : "_self"}
-            className={`relative flex items-center hover:opacity-75 px-4 py-2 rounded-lg ${
-              selectedNav === link.href ? "text-purple-500 font-semibold" : ""
-            }`}
-            onClick={() => setSelectedNav(link.href)}
-          >
-            {/* Left Colored Bar */}
-            {selectedNav === link.href && (
-              <span className="absolute left-0 h-full w-1 bg-purple-500 rounded-r-md"></span>
-            )}
+        <div className="flex flex-col grow w-full text-[19px] font-light space-y-6">
+          {sideNavLinks.map((link) =>
+            (
+              <Link
+                className={`relative flex items-center hover:opacity-75 px-4 py-2 rounded-lg ${
+                  selectedNav === link.href ? "text-purple-500 font-semibold" : ""
+                }`}
+                key={link.name}
+                href={link.href.startsWith("https")
+                  ? link.href
+                  : `/dashboard${link.href}`}
+                target={link.href.startsWith("https") ? "_blank" : "_self"}
+                onClick={() => setSelectedNav(link.href)}
+              >
+                {/* Left Colored Bar */}
+                {selectedNav === link.href && (
+                  <span className="absolute left-0 h-full w-1 bg-purple-500 rounded-r-md"></span>
+                )}
 
-            {/* Icon and Text */}
-            <div className="flex items-center space-x-4 w-full">
-              <Image
-                src={link.icon}
-                height={24}
-                width={24}
-                alt={link.name}
-                style={{
-                  filter:
-                    selectedNav === link.href
-                      ? "invert(36%) sepia(67%) saturate(2915%) hue-rotate(230deg) brightness(105%) contrast(105%)"
-                      : "none",
-                }}
-              />
-              <h2 className="flex-1">{link.name}</h2>
-            </div>
-          </Link>
-        ))}
-      </div>
+                <div className="flex items-center space-x-4">
+                  <Image
+                    src={link.icon}
+                    height={24}
+                    width={24}
+                    alt={link.name}
+                    style={{
+                      filter:
+                        selectedNav === link.href
+                          ? "invert(36%) sepia(67%) saturate(2915%) hue-rotate(230deg) brightness(105%) contrast(105%)"
+                          : "none",
+                    }}
+                  />
+                  <h2>{link.name}</h2>
+                </div>
+              </Link>
+            )
+          )}
+        </div>
 
 
         {/* Log Out Button */}

@@ -7,7 +7,7 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="h-screen w-screen flex overflow-y-scroll">
+  return <div className="h-screen w-screen flex">
     {/* SideNav */}
     <div className="flex">
       <SideNav />
