@@ -46,8 +46,10 @@ const ProjectDetails = () => {
       }
     };
 
-    if (id) fetchProjectData();
-  }, [id, refreshKey]);
+    if (session && judgeId) {
+      fetchProjectData(); // Only fetch if session and judgeId are ready
+    }
+  }, [id, judgeId, refreshKey, session]);
 
   if (!id) return <div>Loading...</div>;
 
@@ -142,7 +144,7 @@ const ProjectDetails = () => {
         <h1 className="text-2xl md:text-3xl font-semibold text-white">
           {project?.name}
         </h1>
-        <p className="sm:pb-6 text-sm sm:text-lg text-white break-words max-w-[20ch] sm:max-w-[30ch] md:max-w-[50ch]">
+        <p className="sm:pb-6 text-sm sm:text-lg text-white break-words max-w-full sm:max-w-full md:max-w-full">
           {project?.description}
         </p>
 

@@ -44,7 +44,6 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
       where: { projectId: projId, categoryId },
     });
 
-
     // Step 3: Validate and deduct judge's available funds
     const judge = await prisma.judge.findUnique({
       where: { id: judgeIdInt },
@@ -81,7 +80,7 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
     // Step 5: Log the transaction in InvestmentHistory
     await prisma.investmentHistory.create({
       data: {
-        judgeId: judgeIdInt,
+        judgeId: judgeId,
         projectId: projId,
         projectValue: projectCategory.investmentAmount + amount,
       },

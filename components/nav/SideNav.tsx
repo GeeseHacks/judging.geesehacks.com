@@ -7,23 +7,13 @@ import { Button } from "../ui/button";
 
 export const sideNavLinks = [
   {
-    name: "Home",
-    href: "",
-    icon: "/static/icons/home.png",
-  },
-  {
-    name: "Schedule",
-    href: "schedule",
-    icon: "/static/icons/calendar.png",
+    name: "Project Browser",
+    href: "project-browser",
+    icon: "/static/icons/stock-market.png",
   },
   {
     name: "Stock Market",
     href: "stock-market",
-    icon: "/static/icons/stock-market.png",
-  },
-  {
-    name: "Project Browser",
-    href: "project-browser",
     icon: "/static/icons/stock-market.png",
   },
 ];

@@ -13,7 +13,7 @@ export const authConfig = {
       const isOnLoginOrSignUp = nextUrl.pathname.startsWith('/login');
 
       if (isLoggedIn && isOnLoginOrSignUp) {
-        return Response.redirect(new URL('/dashboard', nextUrl));
+        return Response.redirect(new URL('/dashboard/project-browser/', nextUrl));
       }
       else if (isLoggedIn || (!isLoggedIn && isOnLoginOrSignUp)) {
         return true;
