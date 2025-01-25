@@ -50,14 +50,12 @@ const ProjectBrowserHeader: React.FC<ProjectBrowserHeaderProps> = ({
 
         <div className="bg-[#3E2B65] px-6 py-3 rounded-xl shadow-lg border border-[#D175FA]/30">
           <div className="text-gray-400 text-sm mb-1">Available Balance</div>
-          {balance !== null ? (
+          {balance !== null && balance !== undefined ? (
             <div className="text-xl font-bold text-[#D175FA]">
-              ${balance.toLocaleString()}
+              ${Number(balance).toLocaleString()}
             </div>
           ) : (
-            <div className="text-xl font-bold text-[#D175FA]">
-              ---
-            </div>
+            <div className="text-xl font-bold text-[#D175FA]">---</div>
           )}
         </div>
       </div>

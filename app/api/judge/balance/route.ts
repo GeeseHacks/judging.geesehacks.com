@@ -3,7 +3,7 @@ import prisma from '@lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
-    const judgeId = 3; // TODO: Replace with actual judge authentication
+    const judgeId = 6969; // TODO: Replace with actual judge authentication
 
     const judge = await prisma.judge.findUnique({
       where: { id: judgeId },
