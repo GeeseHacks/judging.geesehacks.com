@@ -72,7 +72,7 @@ const ProjectBrowser = () => {
       <ProjectBrowserHeader currentTab="all" />
 
         {/* Project Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-5 mt-6 w-full h-full mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-5 mt-6 w-full mb-10">
           {projects.map((project) => (
             <div
               key={project.id}

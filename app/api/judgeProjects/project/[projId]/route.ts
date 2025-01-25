@@ -31,7 +31,6 @@ export async function GET(
       },
     });
 
-    console.log("Project:", project);
     if (!project) {
       return NextResponse.json({ error: "Project not found" }, { status: 404 });
     }
@@ -44,7 +43,6 @@ export async function GET(
       },
     });
 
-    console.log("Judge:", judge);
     if (!judge) {
       return NextResponse.json({ error: "Judge not found" }, { status: 404 });
     }
@@ -55,7 +53,6 @@ export async function GET(
       include: { category: true },
     });
 
-    console.log("JudgeCategory:", judgeCategory);
     if (!judgeCategory) {
       return NextResponse.json(
         { error: "Judge's category not found" },
@@ -72,7 +69,6 @@ export async function GET(
       },
     });
 
-    console.log("ProjectCategory:", projectCategory); 
     if (!projectCategory) { 
       return NextResponse.json(
         {
@@ -91,7 +87,6 @@ export async function GET(
       select: { firstname: true, lastname: true },
     });
 
-    console.log("ProjectMembers:", projectMembers);
     const members = projectMembers.map(
       (user) => `${user.firstname} ${user.lastname}`
     );
@@ -107,7 +102,6 @@ export async function GET(
       },
     });
 
-    console.log("JudgeProject:", judgeProject);
     const investedAmount = judgeProject ? judgeProject.amountInvested : 0;
 
     // Build response object
@@ -120,8 +114,6 @@ export async function GET(
       balance: `$${judge.availableFunds.toLocaleString()}`,
       projectMembers: members,
     };
-
-    console.log("Response:", response);
 
     return NextResponse.json(response, { status: 200 });
   } catch (error) {

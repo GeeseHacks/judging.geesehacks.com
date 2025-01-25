@@ -6,25 +6,23 @@ import { useSession } from "next-auth/react";
 interface ProjectBrowserHeaderProps {
   currentTab: "all" | "investments";
   hideTabs?: boolean;
+  refreshTrigger?: number;
 }
 
 const ProjectBrowserHeader: React.FC<ProjectBrowserHeaderProps> = ({
   currentTab,
   hideTabs = false,
+  refreshTrigger = 0,
 }) => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const [balance, setBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const fetchBalance = async () => {
-      if (!session?.user?.id) {
-        setError("Judge ID not available");
-        setLoading(false);
-        return;
-      }
+      if (!session?.user?.id) return;
 
       try {
         const response = await fetch(
@@ -42,8 +40,10 @@ const ProjectBrowserHeader: React.FC<ProjectBrowserHeaderProps> = ({
       }
     };
 
-    fetchBalance();
-  }, [session]);
+    if (status === "authenticated") {
+      fetchBalance();
+    }
+  }, [session, status, refreshTrigger]);
 
   return (
     <>
@@ -64,7 +64,6 @@ const ProjectBrowserHeader: React.FC<ProjectBrowserHeaderProps> = ({
             Submit investments to projects here
           </p>
         </div>
-
         <div className="bg-[#3E2B65] px-6 py-3 rounded-xl shadow-lg border border-[#D175FA]/30">
           <div className="text-gray-400 text-sm mb-1">Available Balance</div>
           {loading ? (

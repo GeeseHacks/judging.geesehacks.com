@@ -23,6 +23,43 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
       throw new Error("Judge's category not found.");
     }
 
+    // Get current JudgeProject record to check amountInvested
+    const currentJudgeProject = await prisma.judgeProject.findUnique({
+      where: {
+        judgeId_projectId: {
+          judgeId: judgeIdInt,
+          projectId: projId
+        }
+      }
+    });
+
+    if (!currentJudgeProject) {
+      throw new Error("Judge's project record not found.");
+    }
+
+    // Check if retraction would result in negative amount
+    if (amount < 0 && Math.abs(amount) > currentJudgeProject.amountInvested) {
+      return NextResponse.json({ 
+        error: 'Cannot retract more than previously invested' 
+      }, { status: 400 });
+    }
+
+    // Get current ProjectCategory record to check investmentAmount
+    const projectCategory = await prisma.projectCategory.findFirst({
+      where: { projectId: projId, categoryId: judgeCategory.categoryId },
+    });
+
+    if (!projectCategory) {
+      throw new Error("Project category not found.");
+    }
+
+    // Check if retraction would result in negative amount for project category
+    if (amount < 0 && Math.abs(amount) > projectCategory.investmentAmount) {
+      return NextResponse.json({ 
+        error: 'Cannot retract more than total project investment' 
+      }, { status: 400 });
+    }
+
     await prisma.judgeProject.update({
       where: {
         judgeId_projectId:{
@@ -39,11 +76,7 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
 
     const categoryId = judgeCategory.categoryId;
 
-    // Step 2: Get the project's category and current investment amount
-    const projectCategory = await prisma.projectCategory.findFirst({
-      where: { projectId: projId, categoryId },
-    });
-
+    
     // Step 3: Validate and deduct judge's available funds
     const judge = await prisma.judge.findUnique({
       where: { id: judgeIdInt },
@@ -68,23 +101,16 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
       data: { investmentAmount: { increment: amount } },
     });
 
-    if (!projectCategory || categoryId !== 5) {
-      return NextResponse.json(
-        {
-          error: `Investment can only be made in projects under category ID 5.`,
+    if (categoryId == 5) {
+       // Step 5: Log the transaction in InvestmentHistory
+      await prisma.investmentHistory.create({
+        data: {
+          judgeId: judgeIdInt,
+          projectId: projId,
+          projectValue: projectCategory.investmentAmount + amount,
         },
-        { status: 403 }
-      );
+      });
     }
-
-    // Step 5: Log the transaction in InvestmentHistory
-    await prisma.investmentHistory.create({
-      data: {
-        judgeId: judgeIdInt,
-        projectId: projId,
-        projectValue: projectCategory.investmentAmount + amount,
-      },
-    });
 
     console.log("Investment successfully completed!");
 
@@ -100,9 +126,6 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
 
 export async function GET(req: NextRequest, { params }: { params: { projId: string } }) {
   const { projId } = params;
-
-  console.log(projId)
-  console.log("HEHEHEHHEHEHEHEH")
 
   try {
     const investments = await prisma.investmentHistory.findMany({
