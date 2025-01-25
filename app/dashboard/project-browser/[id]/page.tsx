@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from 'next-auth/react';
 import { useParams } from "next/navigation";
+import toast from "react-hot-toast";
 import ProjectBrowserHeader from "@/components/ProjectBrowserHeader";
 
 interface Project {
@@ -23,28 +24,31 @@ const ProjectDetails = () => {
   const [project, setProject] = useState<Project | null>(null);
   const [investmentAmount, setInvestmentAmount] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [balanceRefreshTrigger, setBalanceRefreshTrigger] = useState(0);
 
   const judgeId = session?.user?.id;
 
-  useEffect(() => {
-    const fetchProjectData = async () => {
-      if (!id || !judgeId) return;
+  const fetchProjectData = async () => {
+    if (!id || !judgeId) return;
 
-      try {
-        const response = await fetch(`/api/judgeProjects/project/${id}?judgeId=${judgeId}`);
-        console.log(response)
-        if (!response.ok) {
-          throw new Error(`Error fetching project: ${response.status}`);
-        }
-        const data = await response.json();
-
-        setProject(data);
-
-        console.log(project);
-      } catch (err) {
-        console.error("Failed to fetch project data:", err);
+    
+    try {
+      const response = await fetch(`/api/judgeProjects/project/${id}?judgeId=${judgeId}`);
+      console.log(response)
+      if (!response.ok) {
+        throw new Error(`Error fetching project: ${response.status}`);
       }
-    };
+      const data = await response.json();
+
+      setProject(data);
+
+      console.log(project);
+    } catch (err) {
+      console.error("Failed to fetch project data:", err);
+    }
+  };
+  
+  useEffect(() => {
 
     if (session && judgeId) {
       fetchProjectData(); // Only fetch if session and judgeId are ready
@@ -68,6 +72,7 @@ const ProjectDetails = () => {
   // const projId = id;
 
   const handleAddInvestmentClick = async () => {
+    const loadingToast = toast.loading('Adding investment...');
     try {
       const response = await fetch(`/api/investments/${id}`, {
         method: "POST",
@@ -87,15 +92,22 @@ const ProjectDetails = () => {
       const data = await response.json();
       setInvestmentAmount("");
       setRefreshKey((prev) => prev + 1);
-      // setError(null);
+      setBalanceRefreshTrigger(prev => prev + 1);
+      toast.success('Investment added successfully!', {
+        id: loadingToast,
+      });
       console.log("Fetched investments:", data.investments);
+      fetchProjectData();
     } catch (err) {
       console.error("Failed to fetch investments:", err);
-      // setError("Failed to fetch investments. Please try again later.");
+      toast.error('Failed to add investment. Please try again.', {
+        id: loadingToast,
+      });
     }
   };
 
   const handleRetractInvestmentClick = async () => {
+    const loadingToast = toast.loading('Retracting investment...');
     try {
       const response = await fetch(`/api/investments/${id}`, {
         method: "POST",
@@ -113,13 +125,19 @@ const ProjectDetails = () => {
       }
 
       const data = await response.json();
-      // setError(null);
       setInvestmentAmount("");
       setRefreshKey((prev) => prev + 1);
+      setBalanceRefreshTrigger(prev => prev + 1);
+      toast.success('Investment retracted successfully!', {
+        id: loadingToast,
+      });
       console.log("Fetched investments:", data.investments);
+      fetchProjectData();
     } catch (err) {
       console.error("Failed to fetch investments:", err);
-      // setError("Failed to fetch investments. Please try again later.");
+      toast.error('Failed to retract investment. Please try again.', {
+        id: loadingToast,
+      });
     }
   };
 
@@ -128,7 +146,11 @@ const ProjectDetails = () => {
       <div className="absolute -top-24 -left-36 w-[500px] h-[500px] rounded-full bg-[#7D14D0] opacity-10 blur-3xl z-[-10]"></div>
       <div className="absolute -bottom-20 -right-12 w-[500px] h-[500px] rounded-full bg-[#119FCC] opacity-10 blur-3xl z-[-10]"></div>
 
-      <ProjectBrowserHeader currentTab="all" hideTabs={true} />
+      <ProjectBrowserHeader 
+        currentTab="all" 
+        hideTabs={true} 
+        refreshTrigger={balanceRefreshTrigger}
+      />
 
       <div className="flex justify-start mt-6">
         <button
