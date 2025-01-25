@@ -5,7 +5,7 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
   const { projId } = params;
 
   try{
-    const { amount, judgeId} = await req.json();
+    const {amount, judgeId} = await req.json();
 
     if (!amount || !judgeId || !projId) {
       return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
     // Step 5: Log the transaction in InvestmentHistory
     await prisma.investmentHistory.create({
       data: {
-        judgeId: judgeId,
+        judgeId: judgeIdInt,
         projectId: projId,
         projectValue: projectCategory.investmentAmount + amount,
       },
