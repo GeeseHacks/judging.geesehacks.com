@@ -5,14 +5,17 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
   const { projId } = params;
 
   try{
-    const { amount, judgeId} = await req.json();
+    const {amount, judgeId} = await req.json();
 
     if (!amount || !judgeId || !projId) {
       return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
     }
 
+    // Parse judgeId to an integer
+    const judgeIdInt = parseInt(judgeId, 10);
+
     const judgeCategory = await prisma.judgeCategory.findFirst({
-      where: { judgeId: judgeId },
+      where: { judgeId: judgeIdInt },
       include: { category: true },
     });
 
@@ -23,7 +26,7 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
     await prisma.judgeProject.update({
       where: {
         judgeId_projectId:{
-          judgeId: judgeId,
+          judgeId: judgeIdInt,
           projectId: projId
         }
       },
@@ -41,13 +44,9 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
       where: { projectId: projId, categoryId },
     });
 
-    if (!projectCategory) {
-      throw new Error("Project category not found or does not match judge's category.");
-    }
-
     // Step 3: Validate and deduct judge's available funds
     const judge = await prisma.judge.findUnique({
-      where: { id: judgeId },
+      where: { id: judgeIdInt },
     });
 
     if (!judge) {
@@ -59,7 +58,7 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
     }
 
     await prisma.judge.update({
-      where: { id: judgeId },
+      where: { id: judgeIdInt },
       data: { availableFunds: { decrement: amount } },
     });
 
@@ -69,10 +68,19 @@ export async function POST(req: NextRequest, { params }: { params: { projId: str
       data: { investmentAmount: { increment: amount } },
     });
 
+    if (!projectCategory || categoryId !== 5) {
+      return NextResponse.json(
+        {
+          error: `Investment can only be made in projects under category ID 5.`,
+        },
+        { status: 403 }
+      );
+    }
+
     // Step 5: Log the transaction in InvestmentHistory
     await prisma.investmentHistory.create({
       data: {
-        judgeId: judgeId,
+        judgeId: judgeIdInt,
         projectId: projId,
         projectValue: projectCategory.investmentAmount + amount,
       },

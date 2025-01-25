@@ -15,6 +15,14 @@ interface Project {
   icon: string;
 }
 
+const truncateText = (text: string, wordLimit: number) => {
+  const words = text.split(" ");
+  if (words.length > wordLimit) {
+    return words.slice(0, wordLimit).join(" ") + "...";
+  }
+  return text;
+};
+
 const ProjectBrowser = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -55,6 +63,8 @@ const ProjectBrowser = () => {
   if (error) return <p>{error}</p>;
 
   return (
+
+    
     <div className="relative flex flex-col h-full">
       <div className="absolute -top-24 -left-36 w-[500px] h-[500px] rounded-full bg-[#7D14D0] opacity-10 blur-3xl z-[-10]"></div>
       <div className="absolute -bottom-20 -right-12 w-[500px] h-[500px] rounded-full bg-[#119FCC] opacity-10 blur-3xl z-[-10]"></div>
@@ -62,15 +72,15 @@ const ProjectBrowser = () => {
       <ProjectBrowserHeader currentTab="all" />
 
         {/* Project Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-5 mt-6 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-5 mt-6 w-full h-full mb-10">
           {projects.map((project) => (
             <div
               key={project.id}
               onClick={() => handleCardClick(project.id)}
-              className="hover:cursor-pointer hover:bg-[#3e2b655f] bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full"
+              className="hover:cursor-pointer hover:bg-[#3e2b655f] bg-opacity-5 bg-gradient-to-r from-[#815CD1]/5 to-[#6F9297]/5 p-6 sm:p-8 md:p-10 rounded-lg shadow-lg relative flex flex-col w-full max-w-full h-full"
             >
               <h2 className="text-2xl font-semibold">{project.name}</h2>
-              <p className="text-gray-300 mt-10">{project.description}</p>
+              <p className="text-gray-300 mt-5 text-sm">{truncateText(project.description, 10)}</p>
               <div className="flex justify-between items-center mt-5">
                 <div className="font-semibold">
                   <span className="text-purple-400">Value</span> <br />

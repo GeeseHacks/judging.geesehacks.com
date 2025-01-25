@@ -28,7 +28,7 @@ const Login = () => {
             if (response && response.error) {
               throw new Error(response.error); // Throwing the error to be caught by the error handler
             }
-            window.location.href = "/dashboard"
+            window.location.href = "/dashboard/project-browser/"
             return "Logged in successfully!";
           },
           error: (err) => {
