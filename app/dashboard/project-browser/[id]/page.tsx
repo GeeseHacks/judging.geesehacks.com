@@ -14,6 +14,7 @@ interface Project {
   yourInvestment: string;
   balance: string;
   projectMembers: string[];
+  devpostLink: string;
 }
 
 const ProjectDetails = () => {
@@ -144,6 +145,14 @@ const ProjectDetails = () => {
         <h1 className="text-2xl md:text-3xl font-semibold text-white">
           {project?.name}
         </h1>
+        <a 
+          href={project?.devpostLink} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="text-[#BD6CE6] hover:text-[#D175FA] transition-colors"
+        >
+          View on Devpost →
+        </a>
         <p className="sm:pb-6 text-sm sm:text-lg text-white break-words max-w-full sm:max-w-full md:max-w-full">
           {project?.description}
         </p>
