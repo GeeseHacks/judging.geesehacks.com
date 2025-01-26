@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Info } from "lucide-react";
 import ProjectBrowserHeader from "@/components/ProjectBrowserHeader";
+import { useSession } from "next-auth/react";
 
 interface Project {
   id: string;
@@ -41,12 +42,17 @@ interface Project {
 const MyInvestments: React.FC = () => {
   const [teamsData, setTeamsData] = useState<Project[]>([]);
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchInvestments = async () => {
       try {
-        const judgeId = 3; // Replace with actual judge ID from authentication
-        const response = await fetch(`/api/judgeProjects?judgeId=${judgeId}`);
+        if (!session?.user?.id) {
+          console.error("No judge ID found in session");
+          return;
+        }
+
+        const response = await fetch(`/api/judgeProjects?judgeId=${session.user.id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch investments");
         }
@@ -74,8 +80,19 @@ const MyInvestments: React.FC = () => {
       }
     };
 
-    fetchInvestments();
-  }, []);
+    if (status === "authenticated") {
+      fetchInvestments();
+    }
+  }, [session, status]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (status === "unauthenticated") {
+    router.push("/login");
+    return null;
+  }
 
   const handleRowClick = (projectID: string) => {
     router.push(`/dashboard/project-browser/${projectID}`);

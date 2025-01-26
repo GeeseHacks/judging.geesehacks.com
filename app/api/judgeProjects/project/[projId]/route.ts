@@ -27,6 +27,7 @@ export async function GET(
       select: {
         name: true,
         description: true,
+        devpostLink: true,
         imageUrl: true,
       },
     });
@@ -108,6 +109,7 @@ export async function GET(
     const response = {
       name: project.name,
       description: project.description,
+      devpostLink: project.devpostLink,
       icon: project.imageUrl || "",
       currentValue: `$${curVal.toLocaleString()}`,
       yourInvestment: `$${investedAmount.toLocaleString()}`,
