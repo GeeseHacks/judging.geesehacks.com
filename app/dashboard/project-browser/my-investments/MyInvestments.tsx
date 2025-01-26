@@ -156,9 +156,6 @@ const MyInvestments: React.FC = () => {
                                 Detailed graph data for {team.name}.
                               </DialogDescription>
                             </DialogHeader>
-                            <StockGraph
-                              projId={"a72d1d4e-6187-49be-b3e4-c7e47b9884b2"}
-                            />
                           </DialogContent>
                         </Dialog>
                       </TableCell>
