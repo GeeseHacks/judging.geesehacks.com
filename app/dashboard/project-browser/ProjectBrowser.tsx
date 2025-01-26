@@ -39,7 +39,7 @@ const ProjectBrowser = () => {
 
       try {
         const judgeId = session.user.id; // Dynamically get judgeId from session
-        const response = await fetch(`/api/judgeProjects?judgeId=${judgeId}`);
+        const response = await fetch(`/api/allProjects?judgeId=${judgeId}`);
         if (!response.ok) {
           throw new Error(`Error fetching projects: ${response.status}`);
         }

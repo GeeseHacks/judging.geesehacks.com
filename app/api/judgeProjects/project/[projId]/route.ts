@@ -6,20 +6,20 @@ export async function GET(
   { params }: { params: { projId: string } }
 ) {
   const url = new URL(request.url);
-  const judgeId = url.searchParams.get('judgeId');
+  // const judgeId = url.searchParams.get('judgeId');
   const { projId } = params;
 
-  console.log("Received Judge ID:", judgeId, "Project ID:", projId);
+  // console.log("Received Judge ID:", judgeId, "Project ID:", projId);
 
-  if (!judgeId || isNaN(parseInt(judgeId)) || !projId) {
-    return NextResponse.json(
-      { error: "Invalid judgeId or projId" },
-      { status: 400 }
-    );
-  }
+  // if (!judgeId || isNaN(parseInt(judgeId)) || !projId) {
+  //   return NextResponse.json(
+  //     { error: "Invalid judgeId or projId" },
+  //     { status: 400 }
+  //   );
+  // }
 
   try {
-    const judgeIdInt = parseInt(judgeId);
+    // const judgeIdInt = parseInt(judgeId);
 
     // Fetch project details
     const project = await prisma.project.findUnique({
@@ -37,34 +37,34 @@ export async function GET(
     }
 
     // Fetch judge's available funds
-    const judge = await prisma.judge.findUnique({
-      where: { id: judgeIdInt },
-      select: {
-        availableFunds: true,
-      },
-    });
+    // const judge = await prisma.judge.findUnique({
+    //   where: { id: judgeIdInt },
+    //   select: {
+    //     availableFunds: true,
+    //   },
+    // });
 
-    if (!judge) {
-      return NextResponse.json({ error: "Judge not found" }, { status: 404 });
-    }
+    // if (!judge) {
+    //   return NextResponse.json({ error: "Judge not found" }, { status: 404 });
+    // }
 
     // Fetch current project value based on judge's category
-    const judgeCategory = await prisma.judgeCategory.findFirst({
-      where: { judgeId: judgeIdInt },
-      include: { category: true },
-    });
+    // const judgeCategory = await prisma.judgeCategory.findFirst({
+    //   where: { judgeId: judgeIdInt },
+    //   include: { category: true },
+    // });
 
-    if (!judgeCategory) {
-      return NextResponse.json(
-        { error: "Judge's category not found" },
-        { status: 404 }
-      );
-    }
+    // if (!judgeCategory) {
+    //   return NextResponse.json(
+    //     { error: "Judge's category not found" },
+    //     { status: 404 }
+    //   );
+    // }
 
-    const categoryId = judgeCategory.categoryId;
+    // const categoryId = judgeCategory.categoryId;
 
     const projectCategory = await prisma.projectCategory.findFirst({
-      where: { projectId: projId, categoryId },
+      where: { projectId: projId, categoryId: 5 },
       select: {
         investmentAmount: true,
       },
@@ -79,7 +79,6 @@ export async function GET(
         { status: 404 }
       );
     }
-
     const curVal = projectCategory.investmentAmount;
 
     // Fetch project members
@@ -93,17 +92,16 @@ export async function GET(
     );
 
     // Fetch judge's investment in the project
-    const judgeProject = await prisma.judgeProject.findFirst({
-      where: {
-        judgeId: judgeIdInt,
-        projectId: projId,
-      },
-      select: {
-        amountInvested: true,
-      },
-    });
+    // const judgeProject = await prisma.judgeProject.findFirst({
+    //   where: {
+    //     projectId: projId,
+    //   },
+    //   select: {
+    //     amountInvested: true,
+    //   },
+    // });
 
-    const investedAmount = judgeProject ? judgeProject.amountInvested : 0;
+    // const investedAmount = judgeProject ? judgeProject.amountInvested : 0;
 
     // Build response object
     const response = {
@@ -112,8 +110,8 @@ export async function GET(
       devpostLink: project.devpostLink,
       icon: project.imageUrl || "",
       currentValue: `$${curVal.toLocaleString()}`,
-      yourInvestment: `$${investedAmount.toLocaleString()}`,
-      balance: `$${judge.availableFunds.toLocaleString()}`,
+      //yourInvestment: `$${investedAmount.toLocaleString()}`,
+     // balance: `$${judge.availableFunds.toLocaleString()}`,
       projectMembers: members,
     };
 

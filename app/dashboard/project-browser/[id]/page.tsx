@@ -50,11 +50,10 @@ const ProjectDetails = () => {
   };
   
   useEffect(() => {
-
     if (session && judgeId) {
-      fetchProjectData(); // Only fetch if session and judgeId are ready
+      fetchProjectData();
     }
-  }, [id, judgeId, refreshKey, session]);
+  }, [id, judgeId, refreshKey, session, balanceRefreshTrigger]);
 
   if (!id) return <div>Loading...</div>;
 
@@ -90,15 +89,17 @@ const ProjectDetails = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data = await response.json();
+      await response.json();
       setInvestmentAmount("");
+      
+      // Update states and trigger refresh
+      await fetchProjectData();
       setRefreshKey((prev) => prev + 1);
       setBalanceRefreshTrigger(prev => prev + 1);
+      
       toast.success('Investment added successfully!', {
         id: loadingToast,
       });
-      console.log("Fetched investments:", data.investments);
-      fetchProjectData();
     } catch (err) {
       console.error("Failed to fetch investments:", err);
       toast.error('Failed to add investment. Please try again.', {
@@ -125,15 +126,17 @@ const ProjectDetails = () => {
         throw new Error(`Error: ${response.status}`);
       }
 
-      const data = await response.json();
+      await response.json();
       setInvestmentAmount("");
+      
+      // Update states and trigger refresh
+      await fetchProjectData();
       setRefreshKey((prev) => prev + 1);
       setBalanceRefreshTrigger(prev => prev + 1);
+      
       toast.success('Investment retracted successfully!', {
         id: loadingToast,
       });
-      console.log("Fetched investments:", data.investments);
-      fetchProjectData();
     } catch (err) {
       console.error("Failed to fetch investments:", err);
       toast.error('Failed to retract investment. Please try again.', {
