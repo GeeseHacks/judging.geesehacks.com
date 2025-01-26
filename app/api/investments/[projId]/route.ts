@@ -118,7 +118,6 @@ export async function POST(
       // Check for existing entry in the same time window
       const existingEntry = await prisma.investmentHistory.findFirst({
         where: {
-          judgeId: judgeIdInt,
           projectId: projId,
           createdAt: currentTimeWindow,
         },
